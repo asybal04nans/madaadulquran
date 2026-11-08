@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>[hidden]{display:none!important}:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e4a3f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Madaadul Qur'an">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Yayasan Madaadul Qur'an</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;500;600&display=swap">
@@ -279,6 +287,7 @@ footer .ar{font-size:1.7rem}
     <div class="cta">
       <a class="btn line" href="#waris">Kalkulator waris</a>
       <a class="btn line" href="#dalil">Cari dalil</a>
+      <button class="btn" type="button" id="pwaPasang" hidden>Pasang aplikasi</button>
     </div>
     </div>
     <div class="hero-art">
@@ -620,6 +629,7 @@ footer .ar{font-size:1.7rem}
     <p class="ar" lang="ar">مَدَدُ القُرْآن</p>
     <p>Yayasan Madaadul Qur'an, Lembang, Kabupaten Bandung Barat</p>
     <p style="opacity:.75">Mengelola Pesantren Madaadul Qur'an. Pendiri / inisiator: K.H. Rd. Memed Mahmudin Ilyas (alm). Pimpinan: R. Nanan Mutoharul Janan.</p>
+    <p id="pwaIos" hidden style="font-size:.85rem;opacity:.85">Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".</p>
     <p class="image-credit" style="font-size:.78rem;opacity:.72;margin-top:8px">Seluruh gambar suasana pada halaman ini merupakan ilustrasi yang dibuat dengan AI; bukan dokumentasi kegiatan atau bangunan aktual Yayasan.</p>
   </div>
 </footer>
@@ -1381,6 +1391,18 @@ function hitungWaris(c){
   tampil();
 })();
 
+})();
+</script>
+<script>
+/* Aplikasi di HP (PWA) */
+(function(){
+  if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+  var ev,b=document.getElementById('pwaPasang');
+  var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;if(b&&!standalone)b.hidden=false});
+  if(b)b.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){ev=null;b.hidden=true})});
+  window.addEventListener('appinstalled',function(){if(b)b.hidden=true});
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone){var t=document.getElementById('pwaIos');if(t)t.hidden=false}
 })();
 </script>
 </body>
