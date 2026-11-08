@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://asybal04nans.github.io/madaadulquran/sitemap.xml

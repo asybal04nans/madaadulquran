@@ -4,6 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>[hidden]{display:none!important}:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<meta name="description" content="Yayasan Madaadul Qur'an, Lembang: pesantren Al-Qur'an yang sedang dibangun. Infaq, wakaf lahan, zakat, kalkulator zakat dan waris, serta pustaka dalil.">
+<link rel="canonical" href="https://asybal04nans.github.io/madaadulquran/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="id_ID">
+<meta property="og:site_name" content="Yayasan Madaadul Qur'an">
+<meta property="og:title" content="Yayasan Madaadul Qur'an">
+<meta property="og:description" content="Yayasan Madaadul Qur'an, Lembang: pesantren Al-Qur'an yang sedang dibangun. Infaq, wakaf lahan, zakat, kalkulator zakat dan waris, serta pustaka dalil.">
+<meta property="og:url" content="https://asybal04nans.github.io/madaadulquran/">
+<meta property="og:image" content="https://asybal04nans.github.io/madaadulquran/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+.jadwal{background:var(--surface);border-bottom:1px solid var(--line)}
+.jadwal .wrap{padding-block:18px;display:grid;gap:12px}
+.jadwal-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+.jadwal-head strong{font-family:var(--f-display);font-size:1.1rem}
+.jadwal-head span{font-size:.88rem;color:var(--muted)}
+.jt{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.jt div{border:1px solid var(--line);border-radius:8px;padding:8px 6px;text-align:center;min-width:0}
+.jt div b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.jt div span{display:block;font-size:1.15rem;font-weight:600;font-variant-numeric:tabular-nums}
+.jt div.next{border-color:var(--gold);background:var(--gold-soft)}
+.jadwal small{color:var(--muted)}
+@media(max-width:560px){.jt{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.bagikan{display:inline-flex;align-items:center;gap:8px;margin-top:6px}
+.btn.sm{padding:7px 14px;font-size:.85rem}
+</style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0e4a3f">
 <meta name="mobile-web-app-capable" content="yes">
@@ -298,6 +324,14 @@ footer .ar{color:#fff;font-size:1.7rem}
 </div>
 
 <main>
+<section class="jadwal" id="jadwal" aria-label="Jadwal salat Lembang">
+  <div class="wrap">
+    <div class="jadwal-head"><strong>Jadwal salat Lembang</strong><span id="jTanggal"></span></div>
+    <div class="jt" id="jTabel" role="list"></div>
+    <small id="jNext"></small>
+    <small>Perkiraan hitungan (Kemenag: Subuh 20°, Isya 18°, Asar mazhab Syafi'i, ditambah 2 menit kehati-hatian). Untuk waktu pasti, ikuti jadwal resmi Kemenag atau masjid setempat.</small>
+  </div>
+</section>
 <section id="tentang">
   <div class="wrap">
     <div class="eyebrow">Tentang pesantren</div>
@@ -465,6 +499,7 @@ footer .ar{color:#fff;font-size:1.7rem}
           <input id="zDagang" type="text" inputmode="numeric" class="rp" autocomplete="off" value="0"></div>
         <label class="check"><input id="zHaul" type="checkbox" checked> Harta ini sudah genap satu tahun</label>
         <div class="out" id="zOut" aria-live="polite"></div>
+        <button class="btn line sm bagikan" type="button" data-bagikan="zakat.html" data-teks="Kalkulator zakat mal dan zakat fitrah">Bagikan kalkulator ke WhatsApp</button>
         <button class="btn solid" type="button" id="zKirim" style="color:#1b1405">Isi ke formulir konfirmasi</button>
         <small class="muted">Jika Anda memiliki utang jatuh tempo atau kondisi khusus lain, tanyakan kepada ustaz atau pengurus sebelum menetapkan jumlahnya.</small>
       </form>
@@ -528,6 +563,7 @@ footer .ar{color:#fff;font-size:1.7rem}
       <button class="btn solid" type="button" id="wHitung" style="color:#1b1405;justify-self:start">Hitung waris</button>
       <div id="wOut" aria-live="polite"></div>
       <small class="muted">Alat bantu ini mencakup ahli waris yang umum. Kasus lain, seperti anak dalam kandungan, orang hilang, atau penerima dari kerabat jauh (paman, keponakan), perlu ditanyakan kepada ustaz atau Pengadilan Agama.</small>
+      <button class="btn line sm bagikan" type="button" data-bagikan="waris.html" data-teks="Kalkulator waris menurut mazhab Syafi'i, lengkap dengan cara hitungnya">Bagikan kalkulator ke WhatsApp</button>
     </form>
   </div>
 </section>
@@ -631,6 +667,7 @@ footer .ar{color:#fff;font-size:1.7rem}
     <p>Yayasan Madaadul Qur'an, Lembang, Kabupaten Bandung Barat</p>
     <p style="opacity:.75">Mengelola Pesantren Madaadul Qur'an. Pendiri / inisiator: K.H. Rd. Memed Mahmudin Ilyas (alm). Pimpinan: R. Nanan Mutoharul Janan.</p>
     <p id="pwaIos" hidden style="font-size:.85rem;opacity:.85"></p>
+    <p><button class="btn line sm" type="button" data-bagikan="" data-teks="Yayasan Madaadul Qur'an, Lembang: pesantren Al-Qur'an yang sedang dibangun. Infaq, wakaf, zakat, kalkulator waris, dan pustaka dalil." style="color:inherit">Bagikan situs ini ke WhatsApp</button></p>
     <p class="image-credit" style="font-size:.78rem;opacity:.72;margin-top:8px">Seluruh gambar suasana pada halaman ini merupakan ilustrasi yang dibuat dengan AI; bukan dokumentasi kegiatan atau bangunan aktual Yayasan.</p>
   </div>
 </footer>
@@ -1350,7 +1387,8 @@ function hitungWaris(c){
   function kartu(e){
     return '<article class="dcard"><div class="jenis">'+esc(e.j)+'</div><h3>'+esc(e.t)+'</h3>'+
       (e.ar?'<p class="ar-block" lang="ar">'+e.ar+'</p>':'')+
-      '<p>'+esc(e.i)+'</p>'+(e.s?'<p class="src">'+esc(e.s)+'</p>':'')+'</article>';
+      '<p>'+esc(e.i)+'</p>'+(e.s?'<p class="src">'+esc(e.s)+'</p>':'')+
+      '<button class="btn line sm bagikan" type="button" data-bagikan="dalil.html" data-teks="'+esc(e.t+': '+e.i+(e.s?' ('+e.s+')':'')).replace(/"/g,'&quot;')+'">Bagikan</button></article>';
   }
   function tampil(){
     var r=cari(), total=r.list.length, batas=(!r.toks.length&&!jenis&&!showAll)?6:total;
@@ -1407,6 +1445,55 @@ function hitungWaris(c){
   function hint(x){if(t&&!standalone){t.textContent=x;t.hidden=false}}
   if(/iphone|ipad|ipod/i.test(ua))hint('Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".');
   else if(/android/i.test(ua))setTimeout(function(){if(!ev)hint('Untuk memasang di HP: buka menu browser (titik tiga), lalu pilih "Instal aplikasi" atau "Tambahkan ke layar utama". Bila tidak ada, buka situs ini di Chrome.')},3500);
+})();
+</script>
+<script>
+/* Bagikan ke WhatsApp, jadwal salat, dan fokus halaman */
+(function(){
+  var BASE='https://asybal04nans.github.io/madaadulquran/';
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-bagikan]');if(!b)return;
+    var teks=b.getAttribute('data-teks')||'',u=BASE+(b.getAttribute('data-bagikan')||'');
+    window.open('https://wa.me/?text='+encodeURIComponent(teks+'\n\n'+u),'_blank','noopener');
+  });
+  var f=window.FOKUS;
+  if(f&&!location.hash)window.addEventListener('load',function(){var el=document.getElementById(f);if(el)el.scrollIntoView()});
+
+  /* Jadwal salat: Lembang, WIB */
+  var LAT=-6.8119,LON=107.6178,TZ=7;
+  var R=Math.PI/180;
+  function fix(x,a){x=x-a*Math.floor(x/a);return x<0?x+a:x}
+  function jd(y,m,d){if(m<=2){y-=1;m+=12}var A=Math.floor(y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
+  function sun(j){var D=j-2451545,g=fix(357.529+0.98560028*D,360),q=fix(280.459+0.98564736*D,360),L=fix(q+1.915*Math.sin(g*R)+0.02*Math.sin(2*g*R),360),e=23.439-0.00000036*D,RA=fix(Math.atan2(Math.cos(e*R)*Math.sin(L*R),Math.cos(L*R))/R/15,24);return{decl:Math.asin(Math.sin(e*R)*Math.sin(L*R))/R,eqt:q/15-RA}}
+  function hitung(y,m,d){
+    var J=jd(y,m,d)-LON/(15*24);
+    function noonAt(t){var s=sun(J+t/24);return 12+TZ-LON/15-fixEq(s.eqt)}
+    function fixEq(x){return fix(x+12,24)-12}
+    var noon=noonAt(12);noon=noonAt(noon);
+    function T(angle,t){var s=sun(J+t/24),c=(-Math.sin(angle*R)-Math.sin(s.decl*R)*Math.sin(LAT*R))/(Math.cos(s.decl*R)*Math.cos(LAT*R));return Math.acos(Math.max(-1,Math.min(1,c)))/R/15}
+    var s0=sun(J+noon/24),ang=-Math.atan(1/(1+Math.tan(Math.abs(LAT-s0.decl)*R)))/R;
+    var subuh=noon-T(20,noon-5),terbit=noon-T(0.833,noon-6),zuhur=noon+2/60,asar=noon+T(ang,noon+3),magrib=noon+T(0.833,noon+6),isya=noon+T(18,noon+7);
+    var ih=2/60;
+    return[['Subuh',subuh+ih],['Terbit',terbit-ih],['Zuhur',zuhur+ih],['Asar',asar+ih],['Magrib',magrib+ih],['Isya',isya+ih]];
+  }
+  function fmt(h){h=fix(h,24);var m=Math.round(h*60);var hh=Math.floor(m/60)%24,mm=m%60;return(hh<10?'0':'')+hh+'.'+(mm<10?'0':'')+mm}
+  function render(){
+    var tb=document.getElementById('jTabel');if(!tb)return;
+    var now=new Date(),wib=new Date(now.getTime()+now.getTimezoneOffset()*60000+TZ*3600000);
+    var t=hitung(wib.getFullYear(),wib.getMonth()+1,wib.getDate());
+    var cur=wib.getHours()+wib.getMinutes()/60,nx=-1;
+    for(var i=0;i<t.length;i++){if(i!==1&&t[i][1]>cur){nx=i;break}}
+    tb.innerHTML=t.map(function(x,i){return '<div role="listitem"'+(i===nx?' class="next"':'')+'><b>'+x[0]+'</b><span>'+fmt(x[1])+'</span></div>'}).join('');
+    var tg='';
+    try{tg=new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'}).format(now);
+      tg+=' \u00b7 '+new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Jakarta'}).format(now)+' (perkiraan)'}catch(x){}
+    document.getElementById('jTanggal').textContent=tg;
+    var nm=document.getElementById('jNext');
+    if(nx>=0){var sel=Math.round((t[nx][1]-cur)*60);nm.textContent='Berikutnya: '+t[nx][0]+' pukul '+fmt(t[nx][1])+' ('+(sel>=60?Math.floor(sel/60)+' jam ':'')+(sel%60)+' menit lagi)'}
+    else nm.textContent='Salat berikutnya: Subuh besok.';
+  }
+  render();setInterval(render,60000);
+  window.__jadwal=hitung;
 })();
 </script>
 </body>
