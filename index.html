@@ -374,7 +374,10 @@ footer .ar{font-size:1.7rem}
         <input id="kNominal" type="number" inputmode="numeric" min="0" step="1000" required></div>
       <div><label for="kCatatan">Keterangan (boleh dikosongkan)</label>
         <input id="kCatatan" type="text" placeholder="Misalnya: atas nama almarhum orang tua"></div>
-      <button class="btn solid" type="submit" style="color:#1b1405;justify-self:start">Kirim konfirmasi</button>
+      <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+        <label for="kWebsite">Jangan diisi</label>
+        <input id="kWebsite" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="btn solid" type="submit" id="kKirim" style="color:#1b1405;justify-self:start">Kirim konfirmasi</button>
     </form>
 
     <div class="reply" id="kReply" hidden aria-live="polite" tabindex="-1"></div>
@@ -440,6 +443,7 @@ footer .ar{font-size:1.7rem}
 <script>
 (function(){
   var NISAB_GRAM=85, RATE=0.025, WA='6282120243139';
+  var ENDPOINT='https://script.google.com/macros/s/AKfycbxWrozZGgiohol3W9Af3WcOujI-0dZz5W-pUDzIRtRiyTLnffPxLLMkVOXnu1c03hrS7g/exec';
   function $(id){return document.getElementById(id)}
   function num(id){return Math.max(0,parseFloat($(id).value)||0)}
   function rp(n){return 'Rp'+Math.round(n).toLocaleString('id-ID')}
@@ -510,11 +514,30 @@ footer .ar{font-size:1.7rem}
       '<ol><li>Transfer ke rekening Yayasan Madaadul Qur\'an Assadzillah. Bila nomor rekening belum diumumkan di halaman ini, tanyakan lewat WhatsApp.</li>'+
       '<li>Kirim ringkasan ini dan bukti transfer ke WhatsApp pengurus dengan tombol di bawah.</li>'+
       '<li>Pengurus mengecek dan membalas ke nomor WhatsApp Anda.</li></ol>'+
-      '<p class="muted">Halaman ini tidak menyimpan data Anda. Donasi dicatat pengurus setelah ringkasan dikirim lewat WhatsApp.</p>'+
+      '<p class="muted" id="kStatus">Menyimpan konfirmasi Anda...</p>'+
       '<p><a class="btn solid" style="color:#1b1405" href="'+link+'" target="_blank" rel="noopener">Kirim ke WhatsApp pengurus</a></p>';
     box.hidden=false;
     box.scrollIntoView({behavior:'smooth',block:'start'});
     box.focus({preventScroll:true});
+
+    var tombol=$('kKirim');
+    tombol.disabled=true;
+    var st=$('kStatus');
+    function selesai(teks){if(st)st.textContent=teks;tombol.disabled=false}
+    var payload={jenis:j,nama:nama,wa:wa,nominal:nom,catatan:ket,kode:k,website:$('kWebsite').value};
+    var batas=new AbortController();
+    var timer=setTimeout(function(){batas.abort()},20000);
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),signal:batas.signal})
+      .then(function(r){return r.json()})
+      .then(function(h){
+        clearTimeout(timer);
+        if(h&&h.ok){selesai('Konfirmasi Anda sudah diterima pengurus dengan kode '+k+'. Kirim bukti transfer lewat WhatsApp agar donasi dicocokkan.')}
+        else{selesai('Konfirmasi belum tersimpan otomatis. Silakan kirim lewat WhatsApp dengan tombol di bawah agar tetap tercatat.')}
+      })
+      .catch(function(){
+        clearTimeout(timer);
+        selesai('Konfirmasi belum dapat disimpan otomatis. Silakan kirim lewat WhatsApp dengan tombol di bawah agar tetap tercatat.');
+      });
   });
 
   setJenis();calcMal();calcFitrah();
