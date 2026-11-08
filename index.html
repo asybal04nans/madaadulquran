@@ -906,9 +906,11 @@ function hitungWaris(c){
   function pakaiAshabah(rem,ketTambah){
     var mem=g.m.filter(function(x){return x.n>0});
     var W=0;mem.forEach(function(x){W+=x.n*x.w});
+    r.ash={rem:rem,W:W,mem:mem.map(function(x){return {nama:x.nama,n:x.n,w:x.w}})};
     mem.forEach(function(x){
       var f=cmp(rem,ZERO)>0?ml(rem,F(x.n*x.w,W)):ZERO;
       var rw=row(x.k,x.nama,x.n);
+      if(rw.fur===undefined)rw.fur=rw.f;
       rw.f=ad(rw.f,f);
       rw.ket.push(ketTambah);
     });
@@ -1009,7 +1011,33 @@ function hitungWaris(c){
     }).join('');
     var tbl='<div class="tblwrap"><table class="tbl"><thead><tr><th>Ahli waris</th><th class="num">Orang</th><th class="num">Bagian</th><th class="num">Jumlah</th><th class="num">Per orang</th><th>Dasar</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
     var notes=h.notes.map(function(t){return '<div class="wnote">'+esc(t)+'</div>'}).join('');
-    out.innerHTML='<div style="display:grid;gap:12px">'+sum+tbl+notes+'</div>';
+    function pct(f){var v=f[0]/f[1]*100;return (Math.round(v*100)/100).toLocaleString('id-ID')+'%'}
+    var mudah='<div class="wnote"><strong>Cara hitung mudah</strong><ol style="margin:8px 0 0;padding-left:20px;display:grid;gap:6px">';
+    if(h.ash&&!h.notes.some(function(t){return /\'aul|radd/i.test(t)})){
+      var fr=h.rows.filter(function(x){var f=x.fur!==undefined?x.fur:x.f;return f[0]>0&&x.fur!==undefined?true:(x.fur===undefined&&x.f[0]>0)});
+      var totFur=0;
+      var lst=fr.map(function(x){var f=x.fur!==undefined?x.fur:x.f;totFur+=net*f[0]/f[1];return esc(x.nama)+' '+fs(f)+' ('+pct(f)+') \u00d7 '+rp(net)+' = <strong>'+rp(net*f[0]/f[1])+'</strong>'});
+      var sisa=net-totFur;
+      mudah+='<li><strong>Keluarkan bagian pasti (furudh) lebih dulu.</strong>'+(lst.length?'<br>'+lst.join('<br>'):'<br>Tidak ada ahli waris penerima bagian pasti.')+'</li>';
+      mudah+='<li><strong>Hitung sisanya.</strong><br>'+rp(net)+' \u2212 '+rp(totFur)+' = <strong>'+rp(sisa)+'</strong></li>';
+      if(h.ash.W===1){
+        mudah+='<li><strong>Sisa diterima seluruhnya</strong> oleh '+esc(h.ash.mem[0].nama.toLowerCase())+': <strong>'+rp(sisa)+'</strong></li>';
+      }else if(h.ash.mem.every(function(x){return x.w===h.ash.mem[0].w})){
+        var sm=h.ash.mem.reduce(function(t,x){return t+x.n},0),sat=sisa/sm;
+        mudah+='<li><strong>Bagi sisa sama rata.</strong><br>'+rp(sisa)+' \u00f7 '+sm+' orang = <strong>'+rp(sat)+'</strong> per orang</li>';
+      }else{
+        var kep=h.ash.mem.map(function(x){return x.n+' '+esc(x.nama.toLowerCase())+' \u00d7 '+x.w}).join(' + ');
+        mudah+='<li><strong>Hitung \u201ckepala\u201d.</strong> Laki-laki dihitung 2, perempuan 1.<br>'+kep+' = <strong>'+h.ash.W+' kepala</strong></li>';
+        var satu=sisa/h.ash.W;
+        mudah+='<li><strong>Bagi sisa dengan jumlah kepala.</strong><br>'+rp(sisa)+' \u00f7 '+h.ash.W+' = <strong>'+rp(satu)+'</strong> per kepala'+
+          '<br>'+h.ash.mem.map(function(x){return esc(x.nama)+': '+x.w+' \u00d7 '+rp(satu)+' = <strong>'+rp(satu*x.w)+'</strong> per orang'}).join('<br>')+'</li>';
+      }
+    }else{
+      mudah+='<li><strong>Setiap ahli waris:</strong> bagian \u00d7 harta yang dibagi ('+rp(net)+').</li>';
+      h.rows.forEach(function(x){mudah+='<li style="list-style:none;margin-left:-20px">'+esc(x.nama)+' '+fs(x.f)+' ('+pct(x.f)+') \u00d7 '+rp(net)+' = <strong>'+rp(net*x.f[0]/x.f[1])+'</strong>'+(x.n>1?', dibagi '+x.n+' orang = '+rp(net*x.f[0]/x.f[1]/x.n)+' per orang':'')+'</li>'});
+    }
+    mudah+='</ol></div>';
+    out.innerHTML='<div style="display:grid;gap:12px">'+sum+tbl+mudah+notes+'</div>';
   });
 })();
 
