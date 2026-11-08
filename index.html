@@ -1026,46 +1026,39 @@ function hitungWaris(c){
     function pct(f){var v=f[0]/f[1]*100;return (Math.round(v*100)/100).toLocaleString('id-ID')+'%'}
     function li(t){return '<li>'+t+'</li>'}
     function hrp(f){return rp(net*f[0]/f[1])}
-    function awam(t){return String(t||'').replace(/[Aa]shabah/g,'penerima sisa').replace(/keturunan/g,'anak atau cucu').replace(/Furudh/g,'Bagian pasti').replace(/furudh/g,'bagian pasti')}
-    function lab(x){return '<strong>'+esc(x.nama)+'</strong>'}
-    function bag(x,f){return lab(x)+' mendapat '+fs(f)+' bagian ('+pct(f)+') = <strong>'+hrp(f)+'</strong>'}
+    function frp(x,f){return esc(x.nama)+' '+fs(f)+' ('+pct(f)+') × '+rp(net)+' = <strong>'+hrp(f)+'</strong>'}
     var st=[];
-    st.push(li('<strong>Bayangkan seluruh harta sebagai satu kue utuh.</strong><br>Kue itu akan dipotong untuk para ahli waris. Seluruh potongan harus berjumlah tepat satu kue (100%).'));
-    st.push(li('<strong>Siapkan dulu harta yang boleh dibagi.</strong><br>Sebelum warisan dibagi, harta dipakai untuk biaya jenazah, melunasi utang, dan menunaikan wasiat (paling banyak sepertiga). Setelah itu, harta yang tersisa dan boleh dibagi adalah <strong>'+rp(net)+'</strong>.'));
-    var blok=h.notes.filter(function(t){return /terhalang/i.test(t)});
-    st.push(li('<strong>Lihat siapa yang tidak mendapat bagian.</strong><br>Dalam aturan waris, kerabat yang lebih dekat menutup kerabat yang lebih jauh. Karena itu, ada yang tidak mendapat bagian (istilahnya terhalang atau hijab).<br>'+(blok.length?blok.map(esc).join('<br>'):'Pada kasus ini <strong>tidak ada</strong> yang terhalang, semua yang Anda isi mendapat bagian.')));
     var fr=h.rows.filter(function(x){return x.f0&&x.f0[0]>0});
-    st.push(li('<strong>Bagikan jatah yang sudah ditetapkan.</strong><br>Sebagian ahli waris sudah ditentukan jatahnya berupa pecahan dari harta (istilahnya bagian pasti).<br>'+(fr.length?fr.map(function(x){return bag(x,x.f0)}).join('<br>'):'Pada kasus ini tidak ada yang mendapat jatah tetap; seluruh harta untuk penerima sisa.')));
+    st.push(li('<strong>Keluarkan bagian pasti (furudh) lebih dulu.</strong><br>'+(fr.length?fr.map(function(x){return frp(x,x.f0)}).join('<br>'):'Tidak ada yang menerima bagian pasti.')));
     if(h.mode==='aul'){
-      st.push(li('<strong>Jatah ternyata melebihi harta.</strong><br>Bila jatah semua orang dijumlahkan, hasilnya '+fs(h.tot)+' ('+pct(h.tot)+'). Artinya lebih dari satu kue, padahal kuenya hanya satu. Agar adil, <strong>jatah semua orang dikecilkan sama-sama</strong> dengan cara membagi setiap jatah dengan '+fs(h.tot)+' (istilahnya ‘aul). Hasilnya:<br>'+h.rows.map(function(x){return bag(x,x.f)}).join('<br>')));
+      st.push(li('<strong>Jumlahkan bagian pasti.</strong><br>Hasilnya '+fs(h.tot)+' ('+pct(h.tot)+'), lebih dari 1 sehingga harta tidak cukup. Terjadi ‘aul.'));
+      st.push(li('<strong>Kecilkan semua bagian secara sebanding.</strong> Setiap bagian dibagi '+fs(h.tot)+'.<br>'+h.rows.map(function(x){return frp(x,x.f)}).join('<br>')));
     }else if(h.mode==='musy'){
-      st.push(li('<strong>Kasus khusus: jatah sudah habis.</strong><br>Jatah tetap sudah menghabiskan seluruh harta, sehingga saudara kandung tidak kebagian sisa. Menurut mazhab Syafi\'i, dalam kasus ini saudara kandung ikut berbagi <strong>sepertiga</strong> milik saudara seibu (istilahnya musytarakah). Sepertiga itu ('+hrp(h.musy.pool)+') dibagi <strong>sama rata</strong> kepada '+h.musy.tn+' orang, laki-laki maupun perempuan: '+hrp(F(h.musy.pool[0],h.musy.pool[1]*h.musy.tn))+' per orang. Hasilnya:<br>'+h.rows.filter(function(x){return /^sdr/.test(x.k)}).map(function(x){return bag(x,x.f)}).join('<br>')));
+      st.push(li('<strong>Bagian pasti sudah habis,</strong> saudara kandung tidak kebagian sisa.'));
+      st.push(li('<strong>Terapkan musytarakah.</strong> Sepertiga milik saudara seibu ('+hrp(h.musy.pool)+') dibagi rata kepada '+h.musy.tn+' orang (saudara seibu dan saudara kandung): '+hrp(F(h.musy.pool[0],h.musy.pool[1]*h.musy.tn))+' per orang.<br>'+h.rows.filter(function(x){return /^sdr/.test(x.k)}).map(function(x){return frp(x,x.f)}).join('<br>')));
     }else{
       var sisaF=sb(ONE,h.tot),sisa=net*sisaF[0]/sisaF[1];
-      st.push(li('<strong>Hitung sisa kue.</strong><br>1 − '+fs(h.tot)+' = '+fs(sisaF)+', yaitu '+rp(net)+' − '+rp(net*h.tot[0]/h.tot[1])+' = <strong>'+rp(sisa)+'</strong>.'));
+      st.push(li('<strong>Hitung sisanya.</strong><br>'+rp(net)+' − '+rp(net*h.tot[0]/h.tot[1])+' = <strong>'+rp(sisa)+'</strong>'));
       if(h.mode==='ash'&&h.ash){
         if(h.ash.W===1){
-          st.push(li('<strong>Berikan sisa kepada penerima sisa.</strong><br>Sisa kue seluruhnya diterima <strong>'+esc(h.ash.mem[0].nama.toLowerCase())+'</strong>: <strong>'+rp(sisa)+'</strong>.'));
+          st.push(li('<strong>Sisa diterima seluruhnya</strong> oleh '+esc(h.ash.mem[0].nama.toLowerCase())+': <strong>'+rp(sisa)+'</strong>'));
         }else if(h.ash.mem.every(function(x){return x.w===h.ash.mem[0].w})){
           var sm=h.ash.mem.reduce(function(t,x){return t+x.n},0);
-          st.push(li('<strong>Bagi sisa sama rata.</strong><br>Sisa '+rp(sisa)+' dibagi '+sm+' orang = <strong>'+rp(sisa/sm)+'</strong> per orang.'));
+          st.push(li('<strong>Bagi sisa sama rata.</strong><br>'+rp(sisa)+' ÷ '+sm+' orang = <strong>'+rp(sisa/sm)+'</strong> per orang'));
         }else{
-          var kep=h.ash.mem.map(function(x){return x.n+' '+esc(x.nama.toLowerCase())+' × '+x.w+' jatah'}).join(' + ');
-          st.push(li('<strong>Bagi sisa dengan aturan laki-laki dua kali perempuan.</strong><br>Caranya: setiap laki-laki dihitung <strong>2 jatah</strong>, setiap perempuan <strong>1 jatah</strong>.<br>'+kep+' = <strong>'+h.ash.W+' jatah</strong><br>Sisa '+rp(sisa)+' dibagi '+h.ash.W+' jatah = <strong>'+rp(sisa/h.ash.W)+'</strong> untuk satu jatah.<br>'+h.ash.mem.map(function(x){return '<strong>'+esc(x.nama)+'</strong>: '+x.w+' jatah = <strong>'+rp(sisa/h.ash.W*x.w)+'</strong> per orang'}).join('<br>')));
+          var kep=h.ash.mem.map(function(x){return x.n+' '+esc(x.nama.toLowerCase())+' × '+x.w}).join(' + ');
+          st.push(li('<strong>Hitung “kepala”.</strong> Laki-laki dihitung 2, perempuan 1.<br>'+kep+' = <strong>'+h.ash.W+' kepala</strong>'));
+          st.push(li('<strong>Bagi sisa dengan jumlah kepala.</strong><br>'+rp(sisa)+' ÷ '+h.ash.W+' = <strong>'+rp(sisa/h.ash.W)+'</strong> per kepala<br>'+h.ash.mem.map(function(x){return esc(x.nama)+': '+x.w+' × '+rp(sisa/h.ash.W)+' = <strong>'+rp(sisa/h.ash.W*x.w)+'</strong> per orang'}).join('<br>')));
         }
       }else if(h.mode==='ash0'){
-        st.push(li('<strong>Sisa kue kosong.</strong><br>Jatah tetap sudah menghabiskan seluruh harta, sehingga penerima sisa tidak mendapat bagian.'));
+        st.push(li('<strong>Sisa kosong,</strong> penerima sisa (ashabah) tidak mendapat bagian.'));
       }else if(h.mode==='radd'){
-        st.push(li('<strong>Sisa dikembalikan.</strong><br>Sisa kue tidak ada penerimanya. Maka sisa dibagikan lagi kepada para penerima jatah tetap (selain suami atau istri), sesuai perbandingan jatah masing-masing (istilahnya radd). Hasilnya:<br>'+h.rows.map(function(x){return bag(x,x.f)}).join('<br>')));
+        st.push(li('<strong>Bagikan lagi sisanya (radd)</strong> kepada penerima bagian pasti selain suami atau istri, sebanding bagiannya.<br>'+h.rows.map(function(x){return frp(x,x.f)}).join('<br>')));
       }else if(cmp(sisaF,ZERO)>0){
-        st.push(li('<strong>Sisa kue belum ada penerimanya.</strong><br>Lihat catatan di bawah.'));
+        st.push(li('<strong>Sisa belum ada penerimanya.</strong> Lihat catatan di bawah.'));
       }
     }
-    st.push(li('<strong>Hasil akhir tiap orang.</strong><br>'+h.rows.map(function(x){var t=net*x.f[0]/x.f[1];return lab(x)+': '+fs(x.f)+' bagian ('+pct(x.f)+') = <strong>'+rp(t)+'</strong>'+(x.n>1?'. Karena ada '+x.n+' orang, dibagi rata: <strong>'+rp(t/x.n)+'</strong> per orang':'')}).join('<br>')));
-    st.push(li('<strong>Periksa.</strong><br>Semua potongan dijumlahkan hasilnya satu kue utuh (100%), yaitu '+rp(net)+'.'));
-    var ring='<div class="wnote" style="border-left:4px solid #b8893b"><strong>Hasil singkat</strong><ul style="margin:6px 0 0;padding-left:18px;line-height:1.7">'+h.rows.filter(function(x){return x.f[0]>0}).map(function(x){var t=net*x.f[0]/x.f[1];return '<li>'+esc(x.nama)+': <strong>'+rp(t)+'</strong>'+(x.n>1?' ('+rp(t/x.n)+' per orang)':'')+'</li>'}).join('')+'</ul></div>';
-    var mudah=ring+'<div class="wnote"><strong>Cara menghitungnya, langkah demi langkah</strong><ol style="margin:8px 0 0;padding-left:20px;display:grid;gap:10px;line-height:1.55">'+st.join('')+'</ol></div>'+
-      '<details class="wnote"><summary style="cursor:pointer;font-weight:700">Arti istilah yang dipakai</summary><ul style="margin:8px 0 0;padding-left:18px;line-height:1.6"><li><strong>Bagian pasti (furudh)</strong>: jatah berupa pecahan yang sudah ditetapkan, misalnya 1/2 atau 1/6.</li><li><strong>Penerima sisa (ashabah)</strong>: yang menerima sisa harta setelah jatah tetap dibagikan.</li><li><strong>Terhalang (hijab)</strong>: tidak mendapat bagian karena ada kerabat yang lebih dekat.</li><li><strong>‘Aul</strong>: jatah dikecilkan sama-sama karena jumlahnya melebihi harta.</li><li><strong>Radd</strong>: sisa harta dikembalikan kepada penerima jatah tetap.</li><li><strong>Musytarakah</strong>: saudara kandung berbagi sepertiga dengan saudara seibu.</li></ul></details>';
+    var mudah='<div class="wnote"><strong>Cara hitung mudah</strong><ol style="margin:8px 0 0;padding-left:20px;display:grid;gap:6px">'+st.join('')+'</ol></div>';
     out.innerHTML='<div style="display:grid;gap:12px">'+sum+tbl+mudah+notes+'</div>';
   });
 })();
