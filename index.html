@@ -343,12 +343,13 @@ footer .ar{font-size:1.7rem}
     <div class="eyebrow">Infaq, sedekah, dan zakat</div>
     <h2>Cara menyalurkan</h2>
     <div class="col">
-      <p>Penyaluran dilakukan melalui rekening atas nama yayasan, bukan rekening pribadi. Nomor rekening akan diumumkan resmi oleh pengurus di halaman ini. Sebelum itu, hubungi kontak pesantren untuk konfirmasi.</p>
+      <p>Penyaluran dilakukan melalui rekening atas nama yayasan, bukan rekening pribadi. Setelah transfer, isi formulir konfirmasi di bawah agar pengurus dapat mencocokkan donasi Anda.</p>
     </div>
     <div class="pay">
       <div class="row"><span>Penerima</span><span>Yayasan Madaadul Qur'an Assadzillah</span></div>
       <div class="row"><span>Bank</span><span>Bank Syariah Indonesia (BSI)</span></div>
-      <div class="row"><span>Nomor rekening</span><span>Akan diumumkan pengurus</span></div>
+      <div class="row"><span>Nomor rekening</span><span><span id="rek">7773335219</span><button class="copy" type="button" id="copyrek">Salin</button></span></div>
+      <div class="row"><span>Kode bank (dari bank lain)</span><span>451</span></div>
       <div class="row"><span>Konfirmasi donasi</span><span><span id="wa">0821-2024-3139</span><button class="copy" type="button" id="copywa">Salin</button></span></div>
     </div>
     <div class="cta" style="margin-top:22px">
@@ -511,7 +512,7 @@ footer .ar{font-size:1.7rem}
       '<p>Kode konfirmasi: <span class="code">'+k+'</span></p>'+
       '<p class="doa">'+doa+'</p>'+catatan+
       '<p><strong>Langkah berikutnya</strong></p>'+
-      '<ol><li>Transfer ke rekening Yayasan Madaadul Qur\'an Assadzillah. Bila nomor rekening belum diumumkan di halaman ini, tanyakan lewat WhatsApp.</li>'+
+      '<ol><li>Transfer ke rekening BSI 7773335219 atas nama Yayasan Madaadul Qur\'an Assadzillah.</li>'+
       '<li>Kirim ringkasan ini dan bukti transfer ke WhatsApp pengurus dengan tombol di bawah.</li>'+
       '<li>Pengurus mengecek dan membalas ke nomor WhatsApp Anda.</li></ol>'+
       '<p class="muted" id="kStatus">Menyimpan konfirmasi Anda...</p>'+
@@ -538,6 +539,13 @@ footer .ar{font-size:1.7rem}
         clearTimeout(timer);
         selesai('Konfirmasi belum dapat disimpan otomatis. Silakan kirim lewat WhatsApp dengan tombol di bawah agar tetap tercatat.');
       });
+  });
+
+  var cr=$('copyrek');
+  cr.addEventListener('click',function(){
+    function done(){cr.textContent='Tersalin';setTimeout(function(){cr.textContent='Salin'},1500)}
+    function sel(){var r=document.createRange();r.selectNodeContents($('rek'));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}
+    try{navigator.clipboard.writeText('7773335219').then(done,sel)}catch(e){sel()}
   });
 
   setJenis();calcMal();calcFitrah();
