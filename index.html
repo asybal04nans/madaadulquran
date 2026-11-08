@@ -921,7 +921,14 @@ function hitungWaris(c){
     if(g)pakaiAshabah(ZERO,'Ashabah, tidak ada sisa');
   }else{
     var rem=sb(ONE,tot);
-    if(g){
+    if(g&&g.o===5&&cmp(rem,ZERO)===0&&c.sdrKL>0&&c.sdrI>=2&&R.sdrI){
+      /* Musytarakah (himariyah), mazhab Syafi'i: saudara kandung ikut berbagi sepertiga bersama saudara seibu */
+      var pool=R.sdrI.f,tn=c.sdrI+c.sdrKL+c.sdrKP;
+      R.sdrI.f=ml(pool,F(c.sdrI,tn));R.sdrI.ket=['Furudh 1/3, dibagi rata bersama saudara kandung (musytarakah)'];
+      var kl=row('sdrKL','Saudara laki-laki kandung',c.sdrKL);kl.f=ml(pool,F(c.sdrKL,tn));kl.ket.push('Musytarakah: berbagi sepertiga dengan saudara seibu');
+      if(c.sdrKP>0){var kp=row('sdrKP','Saudari kandung',c.sdrKP);kp.f=ml(pool,F(c.sdrKP,tn));kp.ket.push('Musytarakah: berbagi sepertiga dengan saudara seibu')}
+      r.notes.push('Terjadi musytarakah (himariyah): bagian pasti sudah menghabiskan seluruh harta, sehingga saudara kandung tidak mendapat sisa. Menurut mazhab Syafi\'i, saudara kandung ikut berbagi sepertiga dengan saudara seibu, dibagi rata per orang tanpa membedakan laki-laki dan perempuan.');
+    }else if(g){
       pakaiAshabah(rem,cmp(rem,ZERO)>0?'Ashabah (menerima sisa)':'Ashabah, tidak ada sisa');
     }else if(cmp(rem,ZERO)>0){
       var el=ord.filter(function(k){return k!=='suami'&&k!=='istri'});
