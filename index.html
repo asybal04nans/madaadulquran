@@ -646,39 +646,9 @@ footer .ar{color:#fff;font-size:1.7rem}
     <div class="eyebrow">Layanan</div>
     <h2>Pulsa, paket data, dan pembayaran tagihan</h2>
     <div class="col">
-      <p>Pesan isi ulang pulsa, paket data, token listrik, atau pembayaran tagihan lewat WhatsApp. Isi formulir di bawah, lalu pesan akan terkirim ke admin dengan data yang sudah tertata. Harga dan ketersediaan dikonfirmasi admin lebih dulu, dan Anda baru membayar setelah harga disepakati.</p>
+      <p>Layanan isi ulang pulsa, paket data, token listrik, dan pembayaran tagihan tersedia di toko terpisah yang dikelola pribadi oleh pengelola situs. Toko ini tidak terkait dengan penerimaan donasi yayasan.</p>
     </div>
-    <p style="margin-top:16px"><a class="btn solid" style="color:#1b1405" href="toko/">Buka toko pulsa</a></p>
-    <form class="calc" id="lForm" style="margin-top:20px" onsubmit="return false">
-      <div><label for="lJenis">Layanan</label>
-        <select id="lJenis">
-          <option>Pulsa</option>
-          <option>Paket data</option>
-          <option>Token listrik PLN</option>
-          <option>Tagihan listrik PLN</option>
-          <option>Tagihan lain (BPJS, PDAM, internet, dan lainnya)</option>
-        </select></div>
-      <div id="lOpBox"><label for="lOp">Operator</label>
-        <select id="lOp">
-          <option>Telkomsel</option><option>Indosat</option><option>XL</option><option>Axis</option>
-          <option>Tri</option><option>Smartfren</option><option>by.U</option><option>Lainnya</option>
-        </select></div>
-      <div><label for="lNomor" id="lNomorL">Nomor HP tujuan</label>
-        <input id="lNomor" type="text" inputmode="numeric" autocomplete="off" placeholder="08xxxxxxxxxx"></div>
-      <div><label for="lNominal">Nominal atau paket yang diinginkan</label>
-        <input id="lNominal" type="text" autocomplete="off" placeholder="Misalnya: pulsa 50 ribu, atau kuota 10 GB"></div>
-      <button class="btn solid" type="button" id="lKirim" style="color:#1b1405;justify-self:start">Pesan lewat WhatsApp</button>
-      <small class="muted" id="lStatus" aria-live="polite"></small>
-    </form>
-    <div class="calc" style="margin-top:18px">
-      <h3>Beli sendiri atau jadi agen</h3>
-      <p style="margin:0">Anda juga bisa membeli langsung lewat aplikasi mitra kami, Agen Pulsa Termurah. Saat mendaftar, masukkan kode referal <strong id="refKode">91AE76AD</strong>.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <a class="btn line sm" href="https://isipulsa.web.id/" target="_blank" rel="noopener sponsored">Buka Agen Pulsa Termurah</a>
-        <button class="btn line sm" type="button" id="refSalin">Salin kode referal</button>
-      </div>
-      <small class="muted" id="refStatus" aria-live="polite">Keterbukaan: kode referal ini milik pengelola situs, yang dapat memperoleh imbalan dari pendaftaran lewat kode tersebut. Situs mitra dikelola pihak lain dan bukan bagian dari Yayasan.</small>
-    </div>
+    <p style="margin-top:16px"><a class="btn solid" style="color:#1b1405" href="https://asybal04nans.github.io/baniilyas/toko/" target="_blank" rel="noopener">Buka toko pulsa</a></p>
   </div>
 </section>
 
@@ -1486,38 +1456,6 @@ function hitungWaris(c){
   function hint(x){if(t&&!standalone){t.textContent=x;t.hidden=false}}
   if(/iphone|ipad|ipod/i.test(ua))hint('Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".');
   else if(/android/i.test(ua))setTimeout(function(){if(!ev)hint('Untuk memasang di HP: buka menu browser (titik tiga), lalu pilih "Instal aplikasi" atau "Tambahkan ke layar utama". Bila tidak ada, buka situs ini di Chrome.')},3500);
-})();
-</script>
-<script>
-/* Formulir pesan pulsa dan tagihan ke WhatsApp */
-(function(){
-  var WA='6282120243139',$=function(i){return document.getElementById(i)};
-  var j=$('lJenis');if(!j)return;
-  function atur(){
-    var v=j.value,hp=(v==='Pulsa'||v==='Paket data');
-    $('lOpBox').hidden=!hp;
-    $('lNomorL').textContent=hp?'Nomor HP tujuan':(v.indexOf('PLN')>=0?'Nomor meter atau ID pelanggan PLN':'Nomor atau ID pelanggan');
-    $('lNomor').placeholder=hp?'08xxxxxxxxxx':'Nomor meter atau ID pelanggan';
-  }
-  j.addEventListener('change',atur);atur();
-  var rs=$('refSalin');
-  if(rs)rs.addEventListener('click',function(){
-    var k=$('refKode').textContent,o=$('refStatus');
-    function ok(){rs.textContent='Kode tersalin'}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(k).then(ok,function(){o.textContent='Salin manual kode: '+k})}
-    else o.textContent='Salin manual kode: '+k;
-  });
-  $('lKirim').addEventListener('click',function(){
-    var st=$('lStatus'),v=j.value,hp=(v==='Pulsa'||v==='Paket data');
-    var no=$('lNomor').value.replace(/[^0-9]/g,''),nom=$('lNominal').value.trim().replace(/[\r\n]+/g,' ').slice(0,120);
-    if(no.length<8){st.textContent='Isi nomor tujuan dengan benar terlebih dahulu.';return}
-    if(!nom){st.textContent='Isi nominal atau paket yang diinginkan.';return}
-    var t="Assalamu'alaikum, saya ingin memesan layanan dari situs Yayasan Madaadul Qur'an.\n"+
-      'Layanan: '+v+'\n'+(hp?'Operator: '+$('lOp').value+'\n':'')+
-      (hp?'Nomor HP tujuan: ':'Nomor/ID pelanggan: ')+no+'\nPesanan: '+nom+'\n\nMohon info harga dan cara pembayarannya.';
-    st.textContent='Membuka WhatsApp. Jika tidak terbuka, kirim pesan langsung ke 0821-2024-3139.';
-    window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(t),'_blank','noopener');
-  });
 })();
 </script>
 <script>
