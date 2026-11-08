@@ -630,7 +630,7 @@ footer .ar{font-size:1.7rem}
     <p class="ar" lang="ar">مَدَدُ القُرْآن</p>
     <p>Yayasan Madaadul Qur'an, Lembang, Kabupaten Bandung Barat</p>
     <p style="opacity:.75">Mengelola Pesantren Madaadul Qur'an. Pendiri / inisiator: K.H. Rd. Memed Mahmudin Ilyas (alm). Pimpinan: R. Nanan Mutoharul Janan.</p>
-    <p id="pwaIos" hidden style="font-size:.85rem;opacity:.85">Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".</p>
+    <p id="pwaIos" hidden style="font-size:.85rem;opacity:.85"></p>
     <p class="image-credit" style="font-size:.78rem;opacity:.72;margin-top:8px">Seluruh gambar suasana pada halaman ini merupakan ilustrasi yang dibuat dengan AI; bukan dokumentasi kegiatan atau bangunan aktual Yayasan.</p>
   </div>
 </footer>
@@ -1403,7 +1403,10 @@ function hitungWaris(c){
   window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;if(b&&!standalone)b.hidden=false});
   if(b)b.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){ev=null;b.hidden=true})});
   window.addEventListener('appinstalled',function(){if(b)b.hidden=true});
-  if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone){var t=document.getElementById('pwaIos');if(t)t.hidden=false}
+  var t=document.getElementById('pwaIos'),ua=navigator.userAgent;
+  function hint(x){if(t&&!standalone){t.textContent=x;t.hidden=false}}
+  if(/iphone|ipad|ipod/i.test(ua))hint('Untuk memasang di iPhone: ketuk tombol Bagikan di Safari, lalu pilih "Tambah ke Layar Utama".');
+  else if(/android/i.test(ua))setTimeout(function(){if(!ev)hint('Untuk memasang di HP: buka menu browser (titik tiga), lalu pilih "Instal aplikasi" atau "Tambahkan ke layar utama". Bila tidak ada, buka situs ini di Chrome.')},3500);
 })();
 </script>
 </body>
