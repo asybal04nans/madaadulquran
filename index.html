@@ -7,6 +7,85 @@
 <title>Yayasan Madaadul Qur'an</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;500;600&display=swap">
+<style>/* ===== Visual refresh: Islamic Elegant / Madaadul Qur'an ===== */
+:root{
+  --bg:#f7f5ee; --surface:#fffefa; --tint:#edf2eb; --fg:#17251f;
+  --muted:#64736a; --line:#d9dfd4; --green:#124b3c; --green-ink:#fffdf5;
+  --gold:#c49a45; --gold-soft:#f5ebd4;
+}
+.hero{
+  position:relative; overflow:hidden;
+  background:
+    radial-gradient(ellipse at 83% 38%,rgba(202,166,91,.24),transparent 34%),
+    linear-gradient(115deg,#103e33 0%,#145344 58%,#1b604c 100%);
+  padding-top:64px;padding-bottom:70px;
+}
+.hero:after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;
+  background-image:url("data:image/svg+xml,%3Csvg width='72' height='72' viewBox='0 0 72 72' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23e5c982' stroke-width='1'%3E%3Cpath d='M36 4 68 36 36 68 4 36Z M36 17 55 36 36 55 17 36Z M4 4 68 68 M68 4 4 68'/%3E%3C/g%3E%3C/svg%3E");
+}
+.hero .wrap{position:relative;z-index:1;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);align-items:center;gap:34px}
+.hero-copy{display:grid;gap:18px;justify-items:start}
+.hero-art{width:100%;max-width:490px;justify-self:end;filter:drop-shadow(0 22px 35px rgba(0,0,0,.18))}
+.hero-art svg{display:block;width:100%;height:auto}
+.hero .ar{font-size:clamp(2.5rem,6vw,4rem);text-shadow:0 3px 18px rgba(0,0,0,.12)}
+.hero h1{max-width:650px;letter-spacing:-.025em}
+.hero p.lead{line-height:1.8}
+.tag{background:rgba(255,255,255,.07);backdrop-filter:blur(5px)}
+.btn{border-radius:999px;transition:transform .2s,filter .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.12)}
+section{padding-block:68px}
+.eyebrow{display:flex;align-items:center;gap:10px}
+.eyebrow:before{content:"";display:inline-block;width:27px;height:2px;background:var(--gold)}
+h2{letter-spacing:-.02em}
+.card,.person,.calc,.reply,.dalil,.dcard{
+  border-radius:16px;box-shadow:0 8px 28px rgba(28,55,42,.055);
+}
+.card{padding:24px;border-color:rgba(18,75,60,.11);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(28,55,42,.10)}
+.card h3{color:var(--green)}
+.person{border-top:0;border-left:4px solid var(--gold);border-radius:12px}
+.band{background:linear-gradient(180deg,#edf2eb,#f4f3e9)}
+.calc{border-radius:16px}
+.out{border:1px solid rgba(196,154,69,.22)}
+.dalil{border-left:4px solid var(--gold);background:linear-gradient(135deg,#fffefa,#f8f3e7)}
+.ar-block{color:var(--green);font-size:1.65rem}
+.pay .row{padding:15px 0}
+footer{background:linear-gradient(120deg,#103e33,#174f40);position:relative;overflow:hidden}
+footer:before{content:"";position:absolute;right:-55px;top:-90px;width:260px;height:260px;border:1px solid rgba(230,198,130,.22);border-radius:50%;box-shadow:0 0 0 22px rgba(230,198,130,.035),0 0 0 44px rgba(230,198,130,.025)}
+.visual-panel{margin-top:28px;border-radius:18px;overflow:hidden;background:#e8eee5;border:1px solid rgba(18,75,60,.10)}
+.visual-panel svg{display:block;width:100%;height:auto}
+.visual-caption{padding:13px 18px;color:#43564b;font-size:.9rem;background:#fffefa}
+.section-visual{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.72fr);gap:28px;align-items:center;margin-top:24px}
+.section-visual .visual-panel{margin:0}
+.program-visual{margin-top:26px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.program-visual figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 7px 22px rgba(28,55,42,.05)}
+.program-visual svg{display:block;width:100%;height:auto}
+.program-visual figcaption{padding:12px 15px;font-weight:600;color:var(--green)}
+@media(max-width:760px){
+ .hero .wrap{grid-template-columns:1fr}
+ .hero-art{max-width:430px;justify-self:center;grid-row:1}
+ .hero-copy{gap:15px}
+ .section-visual{grid-template-columns:1fr}
+ .program-visual{grid-template-columns:1fr}
+ section{padding-block:48px}
+}
+@media(prefers-reduced-motion:reduce){.card,.btn{transition:none}}
+
+
+/* Real-photo and AI-photo presentation */
+.hero-art{border-radius:22px;overflow:hidden;border:1px solid rgba(230,205,145,.55);box-shadow:0 24px 55px rgba(0,0,0,.22)}
+.hero-art img{display:block;width:100%;height:330px;object-fit:cover;object-position:center}
+.visual-panel>img{display:block;width:100%;height:310px;object-fit:cover;object-position:center}
+.program-visual figure{position:relative}
+.program-visual img{display:block;width:100%;height:190px;object-fit:cover}
+.program-visual figcaption{padding:14px 16px}
+@media(max-width:760px){
+ .hero-art img{height:240px}
+ .visual-panel>img{height:230px}
+ .program-visual img{height:210px}
+}
+</style>
 <style>
 /* Layout: sticky bar, wide hero band, alternating light/tinted sections, single reading column per section */
 :root{
@@ -184,6 +263,7 @@ footer .ar{font-size:1.7rem}
 
 <div class="hero" id="atas">
   <div class="wrap">
+    <div class="hero-copy">
     <p class="ar" lang="ar">مَدَدُ القُرْآن</p>
     <h1>Yayasan Madaadul Qur'an</h1>
     <p class="lead">Yayasan yang membangun Pesantren Madaadul Qur'an di Kampung Cisaroni, Desa Cikahuripan, Lembang, Kabupaten Bandung Barat, untuk madrasah, pengajian, dan asrama santri putra dan putri.</p>
@@ -200,6 +280,10 @@ footer .ar{font-size:1.7rem}
       <a class="btn line" href="#waris">Kalkulator waris</a>
       <a class="btn line" href="#dalil">Cari dalil</a>
     </div>
+    </div>
+    <div class="hero-art">
+      <img src="assets/hero.jpg" alt="Santri putra dan putri mengaji Al-Qur’an dalam kelompok terpisah di lingkungan pesantren" width="1400" height="788" loading="eager">
+    </div>
   </div>
 </div>
 
@@ -211,6 +295,10 @@ footer .ar{font-size:1.7rem}
     <div class="col">
       <p>Pesantren Madaadul Qur'an berada di Jalan Cisaroni, Desa Cikahuripan, Kecamatan Lembang, Kabupaten Bandung Barat. Pesantren ini sedang dalam pembangunan dan dikelola oleh Yayasan Madaadul Qur'an Assadzillah.</p>
       <p>Bangunan pertama disiapkan untuk kegiatan madrasah dan pengajian, serta asrama bagi santri putra dan santri putri. Setelah itu yayasan merencanakan perluasan lahan untuk mendirikan madrasah tingkat MTs dan MA.</p>
+    </div>
+    <div class="visual-panel">
+      <img src="assets/hero.jpg" alt="Kelompok santri putra dan kelompok santri putri membaca Al-Qur’an secara terpisah" loading="lazy">
+      <div class="visual-caption">Ilustrasi suasana belajar dan kebersamaan dalam lingkungan pendidikan Islam, dibuat dengan AI.</div>
     </div>
   </div>
 </section>
@@ -234,6 +322,20 @@ footer .ar{font-size:1.7rem}
       <div class="card"><span class="lbl">Sekarang</span><h3>Madrasah dan pengajian</h3><p class="muted">Ruang belajar madrasah dan pengajian berada di lantai bawah Gedung A.</p></div>
       <div class="card"><span class="lbl">Sekarang</span><h3>Asrama santri</h3><p class="muted">Asrama santri putra di lantai atas Gedung A dan asrama santri putri di Gedung B.</p></div>
       <div class="card"><span class="lbl">Rencana</span><h3>Madrasah MTs dan MA</h3><p class="muted">Dibangun di atas lahan perluasan seluas 1.800 m², di bawah naungan yayasan.</p></div>
+    </div>
+    <div class="program-visual">
+      <figure>
+       <img src="assets/putra.jpg" alt="Santri putra duduk berkelompok mengaji Al-Qur’an bersama ustadz" loading="lazy">
+       <figcaption>Kelompok mengaji santri putra</figcaption>
+      </figure>
+      <figure>
+       <img src="assets/putri.jpg" alt="Santri putri duduk berkelompok mengaji Al-Qur’an bersama ustazah" loading="lazy">
+       <figcaption>Kelompok mengaji santri putri</figcaption>
+      </figure>
+      <figure>
+       <img src="assets/lingkungan.jpg" alt="Bangunan pesantren bernuansa hijau dan putih di kawasan perbukitan" loading="lazy">
+       <figcaption>Ilustrasi lingkungan pesantren</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -518,6 +620,7 @@ footer .ar{font-size:1.7rem}
     <p class="ar" lang="ar">مَدَدُ القُرْآن</p>
     <p>Yayasan Madaadul Qur'an, Lembang, Kabupaten Bandung Barat</p>
     <p style="opacity:.75">Mengelola Pesantren Madaadul Qur'an. Pendiri / inisiator: K.H. Rd. Memed Mahmudin Ilyas (alm). Pimpinan: R. Nanan Mutoharul Janan.</p>
+    <p class="image-credit" style="font-size:.78rem;opacity:.72;margin-top:8px">Seluruh gambar suasana pada halaman ini merupakan ilustrasi yang dibuat dengan AI; bukan dokumentasi kegiatan atau bangunan aktual Yayasan.</p>
   </div>
 </footer>
 
