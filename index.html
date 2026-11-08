@@ -129,6 +129,32 @@ h2{font-size:clamp(1.6rem,4.5vw,2.3rem);margin-bottom:16px}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .reply .code{color:var(--gold)}}
 :root[data-theme="dark"] .reply .code{color:var(--gold)}
 .reply .doa{background:var(--gold-soft);border-radius:6px;padding:12px 14px}
+.sr{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.calc.wide{max-width:860px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.wgrid>div{min-width:0}
+.grp{font-family:var(--f-display);font-size:1.15rem;margin:6px 0 -4px}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.tbl{width:100%;border-collapse:collapse;font-size:.92rem;min-width:620px}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tbl td.num,.tbl th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl tr:last-child td{border-bottom:0}
+.wnote{background:var(--gold-soft);border-radius:6px;padding:12px 14px;font-size:.93rem}
+.werr{border:1px solid var(--gold);border-radius:6px;padding:12px 14px}
+.wsum{display:grid;gap:4px;font-size:.95rem}
+.searchbar{margin-top:24px;max-width:560px}
+.searchbar input{width:100%;font:inherit;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip.on{background:var(--green);color:var(--green-ink);border-color:var(--green)}
+#dSaran{margin-top:10px}
+#dInfo{margin-top:16px;font-size:.92rem}
+.dlist{display:grid;gap:16px;margin-top:14px;max-width:820px}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px;display:grid;gap:10px;min-width:0}
+.dcard .jenis{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--gold)}
+.dcard h3{font-size:1.2rem}
+.dcard .src{font-size:.85rem;color:var(--muted)}
+.dluar{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 footer{background:var(--green);color:var(--green-ink);
   margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
   padding:34px max(16px,env(safe-area-inset-right,0px)) 38px max(16px,env(safe-area-inset-left,0px))}
@@ -148,6 +174,8 @@ footer .ar{font-size:1.7rem}
       <a href="#keutamaan">Keutamaan</a>
       <a href="#lahan">Lahan</a>
       <a href="#zakat">Zakat</a>
+      <a href="#waris">Waris</a>
+      <a href="#dalil">Dalil</a>
       <a href="#donasi">Donasi</a>
       <a href="#kontak">Kontak</a>
     </nav>
@@ -338,6 +366,82 @@ footer .ar{font-size:1.7rem}
   </div>
 </section>
 
+<section id="waris" class="band">
+  <div class="wrap">
+    <div class="eyebrow">Waris</div>
+    <h2>Kalkulator waris menurut mazhab Syafi'i</h2>
+    <div class="col">
+      <p>Masukkan harta peninggalan dan ahli waris yang masih hidup. Kalkulator membagi harta setelah biaya pengurusan jenazah, utang, dan wasiat, sesuai ketentuan faraid dalam QS. an-Nisa' ayat 11, 12, dan 176.</p>
+      <p>Jangan masukkan ahli waris yang terhalang karena berbeda agama, membunuh pewaris, atau berstatus hamba sahaya.</p>
+    </div>
+
+    <form class="calc wide" id="wForm" onsubmit="return false">
+      <div class="wgrid">
+        <div><label for="wPewaris">Yang meninggal (pewaris)</label>
+          <select id="wPewaris"><option value="L">Laki-laki</option><option value="P">Perempuan</option></select></div>
+        <div><label for="wHarta">Total harta peninggalan (Rp)</label>
+          <input id="wHarta" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
+        <div><label for="wBiaya">Biaya pengurusan jenazah (Rp)</label>
+          <input id="wBiaya" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
+        <div><label for="wUtang">Utang pewaris (Rp)</label>
+          <input id="wUtang" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
+        <div><label for="wWasiat">Wasiat kepada bukan ahli waris (Rp)</label>
+          <input id="wWasiat" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
+      </div>
+
+      <h4 class="grp">Ahli waris yang masih hidup (isi jumlah orangnya)</h4>
+      <div class="wgrid">
+        <div id="boxIstri"><label for="hIstri">Istri (0 sampai 4)</label><input id="hIstri" type="number" inputmode="numeric" min="0" max="4" step="1" value="0"></div>
+        <div id="boxSuami" hidden><label for="hSuami">Suami (0 atau 1)</label><input id="hSuami" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hAnakL">Anak laki-laki</label><input id="hAnakL" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hAnakP">Anak perempuan</label><input id="hAnakP" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hCucuL">Cucu laki-laki (dari anak laki-laki)</label><input id="hCucuL" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hCucuP">Cucu perempuan (dari anak laki-laki)</label><input id="hCucuP" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hAyah">Ayah (0 atau 1)</label><input id="hAyah" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hIbu">Ibu (0 atau 1)</label><input id="hIbu" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hKakek">Kakek dari ayah (0 atau 1)</label><input id="hKakek" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hNenekI">Nenek dari pihak ibu (0 atau 1)</label><input id="hNenekI" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hNenekA">Nenek dari pihak ayah (0 atau 1)</label><input id="hNenekA" type="number" inputmode="numeric" min="0" max="1" step="1" value="0"></div>
+        <div><label for="hSdrKL">Saudara laki-laki kandung</label><input id="hSdrKL" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hSdrKP">Saudari kandung</label><input id="hSdrKP" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hSdrAL">Saudara laki-laki seayah</label><input id="hSdrAL" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hSdrAP">Saudari seayah</label><input id="hSdrAP" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+        <div><label for="hSdrI">Saudara atau saudari seibu</label><input id="hSdrI" type="number" inputmode="numeric" min="0" step="1" value="0"></div>
+      </div>
+
+      <button class="btn solid" type="button" id="wHitung" style="color:#1b1405;justify-self:start">Hitung waris</button>
+      <div id="wOut" aria-live="polite"></div>
+      <small class="muted">Alat bantu ini mencakup ahli waris yang umum. Kasus lain, seperti anak dalam kandungan, orang hilang, atau penerima dari kerabat jauh (paman, keponakan), perlu ditanyakan kepada ustaz atau Pengadilan Agama.</small>
+    </form>
+  </div>
+</section>
+
+<section id="dalil">
+  <div class="wrap">
+    <div class="eyebrow">Pustaka dalil</div>
+    <h2>Cari dalil Al-Qur'an, hadis, dan pendapat ulama</h2>
+    <div class="col">
+      <p>Ketik kata kunci seperti infaq, zakat, waris, wakaf, atau ilmu. Pustaka ini memuat dalil terpilih yang berkaitan dengan isi situs ini, dengan rujukan pada kitab yang biasa dipakai di pesantren. Teks Arab dan terjemahnya perlu Anda cek ulang ke mushaf dan kitab induknya sebelum dikutip.</p>
+    </div>
+
+    <form class="searchbar" id="dForm" onsubmit="return false" role="search">
+      <label for="dQ" class="sr">Kata kunci</label>
+      <input id="dQ" type="search" placeholder="Contoh: sedekah jariah" autocomplete="off">
+    </form>
+    <div class="filters" role="group" aria-label="Jenis dalil">
+      <button class="chip on" type="button" data-j="">Semua</button>
+      <button class="chip" type="button" data-j="Al-Qur'an">Al-Qur'an</button>
+      <button class="chip" type="button" data-j="Hadis">Hadis</button>
+      <button class="chip" type="button" data-j="Pendapat ulama">Pendapat ulama</button>
+    </div>
+    <div class="quick" id="dSaran" aria-label="Kata kunci cepat"></div>
+
+    <div id="dInfo" class="muted" aria-live="polite"></div>
+    <div id="dHasil" class="dlist"></div>
+    <div id="dLuar" class="dluar" hidden></div>
+  </div>
+</section>
+
 <section id="donasi" class="band">
   <div class="wrap">
     <div class="eyebrow">Infaq, sedekah, dan zakat</div>
@@ -428,7 +532,7 @@ footer .ar{font-size:1.7rem}
     pct.textContent=fmt(p,2)+'% dari kebutuhan lahan';
   }
   inp.addEventListener('input',update);
-  Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(b){
+  Array.prototype.forEach.call(document.querySelectorAll('.chip[data-v]'),function(b){
     b.addEventListener('click',function(){inp.value=b.getAttribute('data-v');update()});
   });
   update();
@@ -552,5 +656,384 @@ footer .ar{font-size:1.7rem}
 })();
 </script>
 
+<script>
+(function(){
+/* Inti hitung waris, mazhab Syafi'i. Pecahan disimpan sebagai [pembilang, penyebut]. */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t}return a||1}
+function F(n,d){if(d<0){n=-n;d=-d}var g=gcd(n,d);return [n/g,d/g]}
+function ad(a,b){return F(a[0]*b[1]+b[0]*a[1],a[1]*b[1])}
+function sb(a,b){return F(a[0]*b[1]-b[0]*a[1],a[1]*b[1])}
+function ml(a,b){return F(a[0]*b[0],a[1]*b[1])}
+function dv(a,b){return F(a[0]*b[1],a[1]*b[0])}
+function cmp(a,b){return a[0]*b[1]-b[0]*a[1]}
+var ZERO=[0,1], ONE=[1,1];
+function fs(f){return f[0]===0?'0':(f[1]===1?String(f[0]):f[0]+'/'+f[1])}
+
+function hitungWaris(c){
+  var r={error:null,rows:[],notes:[]};
+  var R={}, ord=[];
+  function row(k,nama,n){if(!R[k]){R[k]={k:k,nama:nama,n:n,f:ZERO,ket:[]};ord.push(k)}return R[k]}
+  function fur(k,nama,n,f,ket){var x=row(k,nama,n);x.f=ad(x.f,f);x.ket.push(ket)}
+
+  var pasangan=c.suami+c.istri;
+  var desc=(c.anakL+c.anakP+c.cucuL+c.cucuP)>0;
+  var maleDesc=c.anakL>0||c.cucuL>0;
+  var sibAll=c.sdrKL+c.sdrKP+c.sdrAL+c.sdrAP+c.sdrI;
+  var kakek=c.ayah>0?0:c.kakek;
+
+  if(c.suami>0&&c.istri>0){r.error='Suami dan istri tidak dapat sekaligus menjadi ahli waris dari satu pewaris.';return r}
+  if(kakek>0&&!maleDesc&&(c.sdrKL+c.sdrKP+c.sdrAL+c.sdrAP)>0){
+    r.error='Kakek bersama saudara kandung atau saudara seayah memiliki perhitungan khusus dalam mazhab Syafi\'i (muqasamah dan pilihan bagian terbaik bagi kakek). Kasus ini tidak dihitung otomatis. Tanyakan kepada ustaz atau Pengadilan Agama.';
+    return r;
+  }
+  if(c.ayah>0&&c.kakek>0)r.notes.push('Kakek terhalang oleh ayah, sehingga tidak mendapat bagian.');
+
+  var ash=[];
+
+  // Pasangan
+  var spouseFrac=ZERO;
+  if(c.suami>0){spouseFrac=desc?F(1,4):F(1,2);fur('suami','Suami',1,spouseFrac,'Furudh')}
+  if(c.istri>0){spouseFrac=desc?F(1,8):F(1,4);fur('istri','Istri',c.istri,spouseFrac,'Furudh, dibagi rata')}
+
+  // Ibu
+  var umar=!desc&&sibAll<2&&c.ayah>0&&c.ibu>0&&pasangan>0;
+  if(c.ibu>0){
+    var fIbu;
+    if(desc||sibAll>=2)fIbu=F(1,6);
+    else if(umar)fIbu=ml(sb(ONE,spouseFrac),F(1,3));
+    else fIbu=F(1,3);
+    fur('ibu','Ibu',1,fIbu,umar?'1/3 dari sisa setelah bagian pasangan (Umariyatain)':'Furudh');
+  }
+
+  // Ayah dan kakek
+  function bapak(k,nama){
+    if(maleDesc)fur(k,nama,1,F(1,6),'Furudh');
+    else if(desc){fur(k,nama,1,F(1,6),'Furudh 1/6');ash.push({o:k==='ayah'?3:4,m:[{k:k,nama:nama,n:1,w:1}]})}
+    else ash.push({o:k==='ayah'?3:4,m:[{k:k,nama:nama,n:1,w:1}]});
+  }
+  if(c.ayah>0)bapak('ayah','Ayah');
+  if(kakek>0)bapak('kakek','Kakek');
+
+  // Nenek
+  var nI=c.ibu>0?0:c.nenekI;
+  var nA=(c.ibu>0||c.ayah>0)?0:c.nenekA;
+  var nn=nI+nA;
+  if(c.nenekI>0&&nI===0)r.notes.push('Nenek dari pihak ibu terhalang oleh ibu.');
+  if(c.nenekA>0&&nA===0)r.notes.push('Nenek dari pihak ayah terhalang oleh ibu atau ayah.');
+  if(nn>0){
+    if(nI>0)fur('nenekI','Nenek dari pihak ibu',nI,ml(F(1,6),F(nI,nn)),'Furudh 1/6, dibagi rata antar nenek');
+    if(nA>0)fur('nenekA','Nenek dari pihak ayah',nA,ml(F(1,6),F(nA,nn)),'Furudh 1/6, dibagi rata antar nenek');
+  }
+
+  // Anak
+  if(c.anakL>0){
+    ash.push({o:1,m:[{k:'anakL',nama:'Anak laki-laki',n:c.anakL,w:2},{k:'anakP',nama:'Anak perempuan',n:c.anakP,w:1}]});
+  }else if(c.anakP>0){
+    fur('anakP','Anak perempuan',c.anakP,c.anakP===1?F(1,2):F(2,3),'Furudh');
+  }
+
+  // Cucu dari anak laki-laki
+  if(c.anakL>0){
+    if(c.cucuL+c.cucuP>0)r.notes.push('Cucu terhalang oleh anak laki-laki.');
+  }else{
+    if(c.cucuL>0){
+      ash.push({o:2,m:[{k:'cucuL',nama:'Cucu laki-laki (dari anak laki-laki)',n:c.cucuL,w:2},{k:'cucuP',nama:'Cucu perempuan (dari anak laki-laki)',n:c.cucuP,w:1}]});
+    }else if(c.cucuP>0){
+      if(c.anakP>=2)r.notes.push('Cucu perempuan terhalang oleh dua anak perempuan atau lebih.');
+      else if(c.anakP===1)fur('cucuP','Cucu perempuan (dari anak laki-laki)',c.cucuP,F(1,6),'Furudh 1/6 (penyempurna 2/3)');
+      else fur('cucuP','Cucu perempuan (dari anak laki-laki)',c.cucuP,c.cucuP===1?F(1,2):F(2,3),'Furudh');
+    }
+  }
+
+  // Saudara
+  var sibOk=!maleDesc&&c.ayah===0&&kakek===0;
+  var femDesc=c.anakP>0||c.cucuP>0;
+  if(sibOk){
+    var kmg=false;
+    if(c.sdrKL>0){
+      ash.push({o:5,m:[{k:'sdrKL',nama:'Saudara laki-laki kandung',n:c.sdrKL,w:2},{k:'sdrKP',nama:'Saudari kandung',n:c.sdrKP,w:1}]});
+    }else if(c.sdrKP>0){
+      if(femDesc){ash.push({o:5,m:[{k:'sdrKP',nama:'Saudari kandung',n:c.sdrKP,w:1}]});kmg=true}
+      else fur('sdrKP','Saudari kandung',c.sdrKP,c.sdrKP===1?F(1,2):F(2,3),'Furudh');
+    }
+    if(!(c.sdrKL>0||kmg)){
+      if(c.sdrAL>0){
+        ash.push({o:6,m:[{k:'sdrAL',nama:'Saudara laki-laki seayah',n:c.sdrAL,w:2},{k:'sdrAP',nama:'Saudari seayah',n:c.sdrAP,w:1}]});
+      }else if(c.sdrAP>0){
+        if(c.sdrKP>=2)r.notes.push('Saudari seayah terhalang oleh dua saudari kandung atau lebih.');
+        else if(c.sdrKP===1)fur('sdrAP','Saudari seayah',c.sdrAP,F(1,6),'Furudh 1/6 (penyempurna 2/3)');
+        else if(femDesc)ash.push({o:6,m:[{k:'sdrAP',nama:'Saudari seayah',n:c.sdrAP,w:1}]});
+        else fur('sdrAP','Saudari seayah',c.sdrAP,c.sdrAP===1?F(1,2):F(2,3),'Furudh');
+      }
+    }else if(c.sdrAL+c.sdrAP>0){
+      r.notes.push('Saudara seayah terhalang oleh saudara kandung atau saudari kandung yang menjadi ashabah.');
+    }
+  }else if((c.sdrKL+c.sdrKP+c.sdrAL+c.sdrAP)>0){
+    r.notes.push('Saudara kandung dan saudara seayah terhalang oleh anak laki-laki, cucu laki-laki, atau ayah.');
+  }
+  if(c.sdrI>0){
+    if(desc||c.ayah>0||kakek>0)r.notes.push('Saudara seibu terhalang oleh keturunan, ayah, atau kakek.');
+    else fur('sdrI','Saudara atau saudari seibu',c.sdrI,c.sdrI===1?F(1,6):F(1,3),'Furudh, dibagi rata antara laki-laki dan perempuan');
+  }
+
+  if(ord.length===0&&ash.length===0){r.error='Belum ada ahli waris yang berhak. Periksa isian Anda.';return r}
+
+  // 'Aul, ashabah, radd
+  var tot=ZERO;
+  ord.forEach(function(k){tot=ad(tot,R[k].f)});
+  ash.sort(function(a,b){return a.o-b.o});
+  var g=ash.length?ash[0]:null;
+  function pakaiAshabah(rem,ketTambah){
+    var mem=g.m.filter(function(x){return x.n>0});
+    var W=0;mem.forEach(function(x){W+=x.n*x.w});
+    mem.forEach(function(x){
+      var f=cmp(rem,ZERO)>0?ml(rem,F(x.n*x.w,W)):ZERO;
+      var rw=row(x.k,x.nama,x.n);
+      rw.f=ad(rw.f,f);
+      rw.ket.push(ketTambah);
+    });
+  }
+  if(cmp(tot,ONE)>0){
+    r.notes.push('Terjadi \'aul: jumlah bagian pokok ('+fs(tot)+') melebihi satu, sehingga semua bagian dikurangi sebanding.');
+    ord.forEach(function(k){R[k].f=dv(R[k].f,tot)});
+    if(g)pakaiAshabah(ZERO,'Ashabah, tidak ada sisa');
+  }else{
+    var rem=sb(ONE,tot);
+    if(g){
+      pakaiAshabah(rem,cmp(rem,ZERO)>0?'Ashabah (menerima sisa)':'Ashabah, tidak ada sisa');
+    }else if(cmp(rem,ZERO)>0){
+      var el=ord.filter(function(k){return k!=='suami'&&k!=='istri'});
+      var sumE=ZERO;el.forEach(function(k){sumE=ad(sumE,R[k].f)});
+      if(el.length&&cmp(sumE,ZERO)>0){
+        el.forEach(function(k){
+          R[k].f=ad(R[k].f,ml(rem,dv(R[k].f,sumE)));
+          R[k].ket.push('Radd (tambahan dari sisa)');
+        });
+        r.notes.push('Terjadi radd: sisa harta ('+fs(rem)+') dikembalikan kepada ahli waris penerima furudh selain suami atau istri. Sebagian ulama Syafi\'iyah mutaqaddimin menyerahkan sisa ini ke baitul mal, sedangkan ulama mutaakhirin berfatwa radd karena baitul mal tidak lagi terkelola sebagaimana mestinya.');
+      }else{
+        r.notes.push('Sisa harta ('+fs(rem)+') tidak memiliki penerima dalam daftar ini. Ahli waris lain seperti paman atau keponakan, atau baitul mal, berhak atasnya. Kasus ini di luar jangkauan kalkulator.');
+      }
+    }
+  }
+
+  var order=['suami','istri','anakL','anakP','cucuL','cucuP','ayah','kakek','ibu','nenekI','nenekA','sdrKL','sdrKP','sdrAL','sdrAP','sdrI'];
+  r.rows=order.filter(function(k){return R[k]}).map(function(k){return R[k]});
+  return r;
+}
+
+
+/* ===== Tampilan kalkulator waris ===== */
+(function(){
+  function $(id){return document.getElementById(id)}
+  function rp(x){return 'Rp'+Math.round(x).toLocaleString('id-ID')}
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+  function n(id,max){var v=Math.floor(parseFloat($(id).value)||0);if(v<0)v=0;if(max!==undefined&&v>max)v=max;return v}
+  function m(id){return Math.max(0,parseFloat($(id).value)||0)}
+  var pw=$('wPewaris');
+  function toggle(){
+    var L=pw.value==='L';
+    $('boxIstri').hidden=!L;$('boxSuami').hidden=L;
+    if(L)$('hSuami').value=0;else $('hIstri').value=0;
+  }
+  pw.addEventListener('change',toggle);toggle();
+
+  $('wHitung').addEventListener('click',function(){
+    var out=$('wOut');
+    var harta=m('wHarta'),biaya=m('wBiaya'),utang=m('wUtang'),wasiat=m('wWasiat');
+    var c={suami:n('hSuami',1),istri:n('hIstri',4),anakL:n('hAnakL'),anakP:n('hAnakP'),cucuL:n('hCucuL'),cucuP:n('hCucuP'),
+      ayah:n('hAyah',1),ibu:n('hIbu',1),kakek:n('hKakek',1),nenekI:n('hNenekI',1),nenekA:n('hNenekA',1),
+      sdrKL:n('hSdrKL'),sdrKP:n('hSdrKP'),sdrAL:n('hSdrAL'),sdrAP:n('hSdrAP'),sdrI:n('hSdrI')};
+    if(harta<=0){out.innerHTML='<div class="werr">Isi total harta peninggalan terlebih dahulu.</div>';return}
+    var base=harta-biaya-utang;
+    if(base<=0){out.innerHTML='<div class="werr">Harta habis untuk biaya jenazah dan utang, sehingga tidak ada yang dibagikan kepada ahli waris.</div>';return}
+    var cap=base/3, w=Math.min(wasiat,cap), net=base-w;
+    var h=hitungWaris(c);
+    if(h.error){out.innerHTML='<div class="werr">'+esc(h.error)+'</div>';return}
+
+    var sum='<div class="wsum"><div>Total harta: <strong>'+rp(harta)+'</strong></div>'+
+      '<div>Dikurangi biaya jenazah '+rp(biaya)+' dan utang '+rp(utang)+', sisa '+rp(base)+'</div>'+
+      '<div>Wasiat dibayarkan: '+rp(w)+(wasiat>cap?' (dibatasi sepertiga dari '+rp(base)+'; kelebihannya hanya berlaku bila semua ahli waris menyetujui)':'')+'</div>'+
+      '<div>Harta yang dibagi kepada ahli waris: <strong>'+rp(net)+'</strong></div></div>';
+
+    var rows=h.rows.map(function(x){
+      var tot=net*x.f[0]/x.f[1];
+      return '<tr><td>'+esc(x.nama)+'</td><td class="num">'+x.n+'</td><td class="num">'+fs(x.f)+'</td>'+
+        '<td class="num">'+rp(tot)+'</td><td class="num">'+rp(tot/x.n)+'</td><td>'+esc(x.ket.join('; '))+'</td></tr>';
+    }).join('');
+    var tbl='<div class="tblwrap"><table class="tbl"><thead><tr><th>Ahli waris</th><th class="num">Orang</th><th class="num">Bagian</th><th class="num">Jumlah</th><th class="num">Per orang</th><th>Dasar</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+    var notes=h.notes.map(function(t){return '<div class="wnote">'+esc(t)+'</div>'}).join('');
+    out.innerHTML='<div style="display:grid;gap:12px">'+sum+tbl+notes+'</div>';
+  });
+})();
+
+/* ===== Pustaka dalil ===== */
+(function(){
+  function $(id){return document.getElementById(id)}
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+  var D=[
+  {j:"Al-Qur'an",t:"QS. an-Nisa' [4]: 11",k:"waris warisan faraid anak laki-laki anak perempuan ayah ibu bagian wasiat utang",
+   ar:"يُوصِيكُمُ اللَّهُ فِي أَوْلَادِكُمْ ۖ لِلذَّكَرِ مِثْلُ حَظِّ الْأُنثَيَيْنِ",
+   i:"Allah mensyariatkan bagimu tentang (pembagian warisan untuk) anak-anakmu, yaitu bagian seorang anak laki-laki sama dengan bagian dua anak perempuan. Ayat ini juga memuat bagian anak perempuan, bagian ayah dan ibu masing-masing seperenam bila ada anak, bagian ibu sepertiga bila tidak ada anak dan saudara, serta kewajiban menunaikan wasiat dan utang sebelum harta dibagi.",
+   s:"Potongan awal ayat. Tafsir: Tafsir al-Jalalain dan Tafsir Ibnu Katsir."},
+  {j:"Al-Qur'an",t:"QS. an-Nisa' [4]: 12",k:"waris warisan faraid suami istri saudara seibu kalalah bagian wasiat utang",
+   i:"Bagi suami separuh harta istri bila istri tidak punya anak, dan seperempat bila ada anak. Bagi istri seperempat harta suami bila tidak ada anak, dan seperdelapan bila ada anak. Saudara atau saudari seibu mendapat seperenam bila seorang, dan bersama-sama sepertiga bila lebih dari seorang. Semuanya sesudah wasiat dan utang dibayar.",
+   s:"Ringkasan makna ayat. Teks Arab: lihat mushaf."},
+  {j:"Al-Qur'an",t:"QS. an-Nisa' [4]: 176",k:"waris warisan faraid kalalah saudara kandung saudari saudara seayah",
+   i:"Ayat kalalah: bila seseorang meninggal tanpa anak dan memiliki saudari, ia mendapat separuh harta; dua saudari atau lebih mendapat dua pertiga; dan saudara laki-laki mewarisi seluruh harta saudarinya bila ia tidak punya anak. Bila ada saudara laki-laki dan perempuan, bagian laki-laki sama dengan dua perempuan.",
+   s:"Ringkasan makna ayat. Teks Arab: lihat mushaf."},
+  {j:"Al-Qur'an",t:"QS. al-Baqarah [2]: 261",k:"infaq sedekah pahala berlipat ganda benih jariah",
+   ar:"مَثَلُ الَّذِينَ يُنْفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنْبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنْبُلَةٍ مِائَةُ حَبَّةٍ ۗ وَاللَّهُ يُضَاعِفُ لِمَنْ يَشَاءُ ۗ وَاللَّهُ وَاسِعٌ عَلِيمٌ",
+   i:"Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir biji yang menumbuhkan tujuh tangkai, pada setiap tangkai ada seratus biji. Allah melipatgandakan bagi siapa yang Dia kehendaki, dan Allah Maha Luas lagi Maha Mengetahui.",
+   s:"QS. al-Baqarah [2]: 261"},
+  {j:"Al-Qur'an",t:"QS. Saba' [34]: 39",k:"infaq sedekah rezeki ganti rezeki",
+   ar:"وَمَا أَنْفَقْتُمْ مِنْ شَيْءٍ فَهُوَ يُخْلِفُهُ ۖ وَهُوَ خَيْرُ الرَّازِقِينَ",
+   i:"Apa saja yang kamu infakkan, Allah akan menggantinya, dan Dia sebaik-baik pemberi rezeki.",s:"QS. Saba' [34]: 39"},
+  {j:"Al-Qur'an",t:"QS. Ali Imran [3]: 92",k:"infaq sedekah harta yang dicintai kebajikan",
+   ar:"لَنْ تَنَالُوا الْبِرَّ حَتَّىٰ تُنْفِقُوا مِمَّا تُحِبُّونَ",
+   i:"Kamu tidak akan memperoleh kebajikan sebelum kamu menginfakkan sebagian harta yang kamu cintai.",s:"Potongan ayat. QS. Ali Imran [3]: 92"},
+  {j:"Al-Qur'an",t:"QS. at-Taubah [9]: 103",k:"zakat menyucikan harta amil",
+   ar:"خُذْ مِنْ أَمْوَالِهِمْ صَدَقَةً تُطَهِّرُهُمْ وَتُزَكِّيهِمْ بِهَا",
+   i:"Ambillah zakat dari harta mereka, dengan zakat itu engkau membersihkan dan menyucikan mereka.",s:"Potongan ayat. QS. at-Taubah [9]: 103"},
+  {j:"Al-Qur'an",t:"QS. at-Taubah [9]: 60",k:"zakat mustahik delapan golongan asnaf fakir miskin amil muallaf riqab gharim fi sabilillah ibnu sabil",
+   i:"Zakat hanyalah untuk orang fakir, orang miskin, amil zakat, orang yang dilunakkan hatinya (mualaf), untuk memerdekakan hamba sahaya, orang yang berutang, untuk jalan Allah (fi sabilillah), dan orang yang sedang dalam perjalanan (ibnu sabil). Ini ketetapan dari Allah.",
+   s:"Ringkasan makna ayat. Teks Arab: lihat mushaf."},
+  {j:"Al-Qur'an",t:"QS. al-Baqarah [2]: 43",k:"zakat salat perintah",
+   ar:"وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ",i:"Dirikanlah salat dan tunaikanlah zakat.",s:"Potongan ayat. QS. al-Baqarah [2]: 43"},
+  {j:"Al-Qur'an",t:"QS. al-Baqarah [2]: 201",k:"doa dunia akhirat keseimbangan",
+   ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+   i:"Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari azab neraka.",s:"QS. al-Baqarah [2]: 201"},
+  {j:"Al-Qur'an",t:"QS. al-Qamar [54]: 17",k:"quran belajar mengaji hafalan pesantren ilmu",
+   ar:"وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ فَهَلْ مِنْ مُدَّكِرٍ",
+   i:"Sungguh, Kami telah memudahkan Al-Qur'an untuk peringatan, maka adakah orang yang mau mengambil pelajaran?",s:"QS. al-Qamar [54]: 17"},
+
+  {j:"Hadis",t:"Sedekah jariah tidak terputus",k:"sedekah jariah wakaf amal terputus ilmu bermanfaat anak saleh pembangunan",
+   ar:"إِذَا مَاتَ ابْنُ آدَمَ انْقَطَعَ عَمَلُهُ إِلَّا مِنْ ثَلَاثَةٍ: صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ",
+   i:"Apabila anak Adam meninggal, terputuslah amalnya kecuali dari tiga perkara: sedekah jariah, ilmu yang bermanfaat, dan anak saleh yang mendoakannya.",s:"HR. Muslim, dari Abu Hurairah."},
+  {j:"Hadis",t:"Sebaik-baik orang belajar dan mengajarkan Al-Qur'an",k:"quran belajar mengajar mengaji pesantren ilmu madrasah",
+   ar:"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+   i:"Sebaik-baik kalian adalah orang yang mempelajari Al-Qur'an dan mengajarkannya.",s:"HR. al-Bukhari, dari Utsman bin Affan."},
+  {j:"Hadis",t:"Berikan bagian waris kepada pemiliknya",k:"waris faraid ashabah sisa kerabat laki-laki terdekat",
+   ar:"أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا فَمَا بَقِيَ فَهُوَ لِأَوْلَى رَجُلٍ ذَكَرٍ",
+   i:"Berikanlah bagian-bagian yang telah ditetapkan kepada pemiliknya, dan sisanya adalah untuk kerabat laki-laki yang paling dekat.",s:"HR. al-Bukhari dan Muslim, dari Ibnu Abbas."},
+  {j:"Hadis",t:"Wasiat paling banyak sepertiga",k:"wasiat sepertiga waris harta",
+   ar:"الثُّلُثُ وَالثُّلُثُ كَثِيرٌ",
+   i:"Sepertiga, dan sepertiga itu sudah banyak.",s:"HR. al-Bukhari dan Muslim, dari Sa'd bin Abi Waqqash."},
+  {j:"Hadis",t:"Sedekah tidak mengurangi harta",k:"sedekah infaq harta berkah",
+   ar:"مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ",i:"Sedekah tidak akan mengurangi harta.",s:"HR. Muslim, dari Abu Hurairah."},
+  {j:"Hadis",t:"Doa dua malaikat tiap pagi",k:"infaq sedekah ganti malaikat doa menahan harta",
+   i:"Setiap pagi dua malaikat turun. Salah satunya berdoa, \"Ya Allah, berilah ganti bagi orang yang berinfak.\" Yang lain berdoa, \"Ya Allah, berilah kerugian bagi orang yang menahan hartanya.\"",s:"HR. al-Bukhari dan Muslim, dari Abu Hurairah."},
+  {j:"Hadis",t:"Rukun Islam yang lima",k:"zakat rukun islam salat puasa haji syahadat",
+   i:"Islam dibangun di atas lima perkara: bersaksi bahwa tidak ada tuhan selain Allah dan Muhammad adalah utusan-Nya, mendirikan salat, menunaikan zakat, haji ke Baitullah, dan puasa Ramadan.",s:"HR. al-Bukhari dan Muslim, dari Ibnu Umar."},
+  {j:"Hadis",t:"Takutlah neraka walau dengan separuh kurma",k:"sedekah infaq sedikit neraka kurma",
+   ar:"اتَّقُوا النَّارَ وَلَوْ بِشِقِّ تَمْرَةٍ",i:"Jagalah dirimu dari neraka walau dengan bersedekah separuh butir kurma.",s:"HR. al-Bukhari dan Muslim, dari Adi bin Hatim."},
+  {j:"Hadis",t:"Tangan di atas lebih baik",k:"sedekah infaq memberi tangan di atas peminta",
+   ar:"الْيَدُ الْعُلْيَا خَيْرٌ مِنَ الْيَدِ السُّفْلَى",i:"Tangan yang di atas (pemberi) lebih baik daripada tangan yang di bawah (penerima).",s:"HR. al-Bukhari dan Muslim, dari Ibnu Umar."},
+  {j:"Hadis",t:"Sedekah sembunyi-sembunyi mendapat naungan",k:"sedekah infaq ikhlas sembunyi naungan hari kiamat",
+   i:"Salah satu dari tujuh golongan yang dinaungi Allah pada hari tidak ada naungan selain naungan-Nya adalah orang yang bersedekah dengan sembunyi-sembunyi sampai tangan kirinya tidak tahu apa yang diinfakkan tangan kanannya.",s:"HR. al-Bukhari dan Muslim, dari Abu Hurairah."},
+  {j:"Hadis",t:"Kewajiban zakat fitrah",k:"zakat fitrah sha beras kurma gandum idul fitri",
+   i:"Rasulullah ﷺ mewajibkan zakat fitrah satu sha' kurma atau satu sha' gandum atas hamba sahaya dan orang merdeka, laki-laki dan perempuan, kecil dan besar dari kaum muslimin, serta memerintahkan agar ditunaikan sebelum orang-orang keluar untuk salat Id.",s:"HR. al-Bukhari dan Muslim, dari Ibnu Umar."},
+  {j:"Hadis",t:"Membangun masjid karena Allah",k:"pembangunan masjid wakaf gedung surga sedekah jariah infaq",
+   ar:"مَنْ بَنَى مَسْجِدًا لِلَّهِ بَنَى اللَّهُ لَهُ مِثْلَهُ فِي الْجَنَّةِ",
+   i:"Siapa yang membangun masjid karena Allah, Allah membangunkan baginya yang semisal di surga.",s:"HR. al-Bukhari dan Muslim, dari Utsman bin Affan."},
+  {j:"Hadis",t:"Menunjukkan kebaikan seperti pelakunya",k:"ajak donasi kebaikan pahala sebar mengajak infaq",
+   ar:"مَنْ دَلَّ عَلَى خَيْرٍ فَلَهُ مِثْلُ أَجْرِ فَاعِلِهِ",
+   i:"Siapa yang menunjukkan kepada suatu kebaikan, ia mendapat pahala seperti pahala orang yang melakukannya.",s:"HR. Muslim, dari Abu Mas'ud al-Anshari."},
+
+  {j:"Pendapat ulama",t:"Imam an-Nawawi: sedekah jariah bermakna wakaf",k:"sedekah jariah wakaf an-nawawi",
+   i:"Dalam syarahnya atas hadis \"terputus amal anak Adam kecuali tiga perkara\", Imam an-Nawawi menjelaskan bahwa sedekah jariah dalam hadis itu bermakna wakaf. Hadis ini menjadi dalil sahnya wakaf dan besarnya pahalanya.",
+   s:"Rujukan: an-Nawawi, Syarh Shahih Muslim, syarah hadis \"idza mata ibnu Adam\"."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: zakat tidak untuk membangun gedung",k:"zakat pembangunan gedung madrasah masjid tanah fi sabilillah mustahik",
+   i:"Dalam mazhab Syafi'i, golongan fi sabilillah adalah para pejuang sukarela yang tidak digaji dari negara. Zakat tidak boleh dipakai untuk membangun masjid, madrasah, atau gedung lain, dan tidak untuk membeli tanah. Zakat diberikan kepada orang yang termasuk delapan golongan penerima.",
+   s:"Rujukan: an-Nawawi, al-Majmu' Syarh al-Muhadzdzab (bab zakat); Minhajut Thalibin (pembagian zakat)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: zakat fitrah berupa makanan pokok",k:"zakat fitrah beras makanan pokok uang sha",
+   i:"Mazhab Syafi'i mensyaratkan zakat fitrah berupa makanan pokok daerah setempat sebanyak satu sha' per jiwa. Menunaikannya dengan uang tidak mencukupi menurut mazhab ini, berbeda dengan mazhab Hanafi.",
+   s:"Rujukan: al-Majmu' Syarh al-Muhadzdzab (bab zakat fitrah)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: perhiasan yang mubah tidak dizakati",k:"zakat mal emas perak perhiasan nisab haul",
+   i:"Perhiasan emas dan perak yang mubah dipakai sehari-hari tidak wajib dizakati menurut mazhab Syafi'i. Emas dan perak simpanan atau batangan wajib dizakati bila mencapai nisab dan genap satu tahun.",
+   s:"Rujukan: Minhajut Thalibin (bab zakat emas dan perak)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: nisab emas dan perak",k:"zakat mal nisab emas perak 85 gram 2,5 persen haul",
+   i:"Nisab emas adalah 20 mitsqal (sekitar 85 gram) dan nisab perak 200 dirham (sekitar 595 gram). Kadar zakatnya satu per empat puluh, yaitu 2,5 persen, setelah harta dimiliki genap satu tahun.",
+   s:"Rujukan: Minhajut Thalibin (bab zakat emas dan perak)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: kakek bersama saudara (muqasamah)",k:"waris kakek saudara muqasamah zaid bin tsabit faraid",
+   i:"Mazhab Syafi'i mengikuti pendapat Zaid bin Tsabit r.a.: kakek dari ayah tidak menghalangi saudara kandung atau saudara seayah, tetapi berbagi dengan mereka (muqasamah) dengan memilih bagian yang terbaik bagi kakek. Kalkulator waris di situs ini tidak menghitung kasus ini secara otomatis.",
+   s:"Rujukan: Minhajut Thalibin (kitab al-faraid)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: batas wasiat",k:"wasiat sepertiga ahli waris izin waris harta",
+   i:"Wasiat paling banyak sepertiga harta bersih. Wasiat yang lebih dari itu, atau wasiat kepada ahli waris, hanya berlaku bila disetujui ahli waris lainnya setelah pewaris wafat. Dasarnya hadis Sa'd bin Abi Waqqash dan hadis \"tidak ada wasiat bagi ahli waris\".",
+   s:"Rujukan: al-Majmu' Syarh al-Muhadzdzab (bab wasiat)."},
+  {j:"Pendapat ulama",t:"Mazhab Syafi'i: sisa harta dan radd",k:"waris radd baitul mal sisa harta faraid",
+   i:"Bila harta tersisa dan tidak ada ahli waris ashabah, mazhab Syafi'i menurut ulama terdahulu menyerahkan sisanya ke baitul mal. Ulama mutaakhirin berfatwa dilakukan radd, yaitu mengembalikan sisa kepada ahli waris penerima furudh selain suami atau istri, karena baitul mal tidak lagi terkelola sebagaimana mestinya.",
+   s:"Rujukan: Minhajut Thalibin (kitab al-faraid)."}
+  ];
+
+  function norm(s){
+    s=String(s).toLowerCase().replace(/[’'`]/g,'').replace(/-/g,' ');
+    s=s.replace(/shodaqoh|shadaqah|shodaqah|sodaqoh|shadaqoh|sedekah/g,'sedekah')
+       .replace(/infak|infaq/g,'infaq')
+       .replace(/hadits|hadist|hadis/g,'hadis')
+       .replace(/warisan|faraidh|faraid|farâ idh/g,'waris')
+       .replace(/jariyah|jariah/g,'jariah')
+       .replace(/qur an|alquran/g,'quran');
+    return s;
+  }
+  D.forEach(function(e){e.n=norm(e.t+' '+e.k+' '+e.i+' '+(e.s||''))});
+
+  var jenis='', showAll=false;
+  var SARAN=['infaq','sedekah jariah','zakat','waris','wakaf','wasiat','ilmu','doa'];
+  function cari(){
+    var q=norm($('dQ').value).trim();
+    var toks=q.split(/\s+/).filter(function(x){return x.length>=2});
+    var list=D.filter(function(e){return !jenis||e.j===jenis}).map(function(e){
+      var sk=0;toks.forEach(function(t){if(e.n.indexOf(t)>=0)sk++});
+      return {e:e,s:sk};
+    });
+    if(toks.length)list=list.filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s});
+    return {list:list,q:$('dQ').value.trim(),toks:toks};
+  }
+  function kartu(e){
+    return '<article class="dcard"><div class="jenis">'+esc(e.j)+'</div><h3>'+esc(e.t)+'</h3>'+
+      (e.ar?'<p class="ar-block" lang="ar">'+e.ar+'</p>':'')+
+      '<p>'+esc(e.i)+'</p>'+(e.s?'<p class="src">'+esc(e.s)+'</p>':'')+'</article>';
+  }
+  function tampil(){
+    var r=cari(), total=r.list.length, batas=(!r.toks.length&&!jenis&&!showAll)?6:total;
+    var shown=r.list.slice(0,batas);
+    $('dHasil').innerHTML=shown.map(function(x){return kartu(x.e)}).join('');
+    var info;
+    if(!total)info='Belum ada dalil dengan kata kunci itu di pustaka ini. Coba kata lain, atau cari di situs di bawah.';
+    else if(batas<total)info='Menampilkan '+batas+' dari '+total+' dalil. Ketik kata kunci atau pilih jenis untuk menyaring.';
+    else info=total+' dalil ditemukan.';
+    $('dInfo').textContent=info;
+    var luar=$('dLuar');
+    if(r.q){
+      var u=encodeURIComponent(r.q);
+      luar.innerHTML='<span class="muted">Cari lebih luas:</span>'+
+        '<a class="btn line" style="border-color:var(--gold)" href="https://quran.com/search?q='+u+'" target="_blank" rel="noopener">Quran.com</a>'+
+        '<a class="btn line" style="border-color:var(--gold)" href="https://sunnah.com/search?q='+u+'" target="_blank" rel="noopener">Sunnah.com</a>';
+      luar.hidden=false;
+    }else luar.hidden=true;
+    if(batas<total){
+      var b=document.createElement('button');b.type='button';b.className='btn solid';b.style.color='#1b1405';b.style.justifySelf='start';
+      b.textContent='Tampilkan semua ('+total+')';
+      b.addEventListener('click',function(){showAll=true;tampil()});
+      $('dHasil').appendChild(b);
+    }
+  }
+  $('dQ').addEventListener('input',function(){showAll=false;tampil()});
+  Array.prototype.forEach.call(document.querySelectorAll('.filters .chip'),function(b){
+    b.addEventListener('click',function(){
+      jenis=b.getAttribute('data-j');showAll=false;
+      Array.prototype.forEach.call(document.querySelectorAll('.filters .chip'),function(x){x.classList.toggle('on',x===b)});
+      tampil();
+    });
+  });
+  $('dSaran').innerHTML=SARAN.map(function(s){return '<button class="chip" type="button" data-q="'+s+'">'+s+'</button>'}).join('');
+  Array.prototype.forEach.call($('dSaran').querySelectorAll('.chip'),function(b){
+    b.addEventListener('click',function(){$('dQ').value=b.getAttribute('data-q');showAll=false;tampil()});
+  });
+  tampil();
+})();
+
+})();
+</script>
 </body>
 </html>
