@@ -944,6 +944,33 @@ function hitungWaris(c){
   }
   pw.addEventListener('change',toggle);toggle();
 
+  /* Sembunyikan ahli waris yang pasti terhijab (terhalang) oleh ahli waris lain yang diisi */
+  function hijab(){
+    var HID={};
+    function v(k){return HID[k]?0:n('h'+k)}
+    for(var pass=0;pass<3;pass++){
+      var anakL=v('AnakL'),cucuL=v('CucuL'),ayah=v('Ayah'),ibu=v('Ibu'),anak=anakL+v('AnakP'),cucu=cucuL+v('CucuP'),sdrKL=v('SdrKL');
+      HID.CucuL=anakL>0;
+      HID.CucuP=anakL>0;
+      HID.Kakek=ayah>0;
+      HID.NenekI=ibu>0;
+      HID.NenekA=ayah>0||ibu>0;
+      HID.SdrKL=anakL>0||cucuL>0||ayah>0;
+      HID.SdrKP=anakL>0||cucuL>0||ayah>0;
+      HID.SdrAL=anakL>0||cucuL>0||ayah>0||sdrKL>0;
+      HID.SdrAP=anakL>0||cucuL>0||ayah>0||sdrKL>0;
+      HID.SdrI=anak>0||cucu>0||ayah>0||v('Kakek')>0;
+    }
+    Object.keys(HID).forEach(function(k){
+      var el=$('h'+k),box=el.parentNode;
+      box.hidden=!!HID[k];
+      if(HID[k])el.value=0;
+    });
+  }
+  $('wForm').addEventListener('input',hijab);
+  $('wForm').addEventListener('change',hijab);
+  hijab();
+
   $('wHitung').addEventListener('click',function(){
     var out=$('wOut');
     var harta=m('wHarta'),biaya=m('wBiaya'),utang=m('wUtang'),wasiat=m('wWasiat');
