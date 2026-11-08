@@ -669,6 +669,15 @@ footer .ar{color:#fff;font-size:1.7rem}
       <button class="btn solid" type="button" id="lKirim" style="color:#1b1405;justify-self:start">Pesan lewat WhatsApp</button>
       <small class="muted" id="lStatus" aria-live="polite"></small>
     </form>
+    <div class="calc" style="margin-top:18px">
+      <h3>Beli sendiri atau jadi agen</h3>
+      <p style="margin:0">Anda juga bisa membeli langsung lewat aplikasi mitra kami, Agen Pulsa Termurah. Saat mendaftar, masukkan kode referal <strong id="refKode">91AE76AD</strong>.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <a class="btn line sm" href="https://isipulsa.web.id/" target="_blank" rel="noopener sponsored">Buka Agen Pulsa Termurah</a>
+        <button class="btn line sm" type="button" id="refSalin">Salin kode referal</button>
+      </div>
+      <small class="muted" id="refStatus" aria-live="polite">Keterbukaan: kode referal ini milik pengelola situs, yang dapat memperoleh imbalan dari pendaftaran lewat kode tersebut. Situs mitra dikelola pihak lain dan bukan bagian dari Yayasan.</small>
+    </div>
   </div>
 </section>
 
@@ -1490,6 +1499,13 @@ function hitungWaris(c){
     $('lNomor').placeholder=hp?'08xxxxxxxxxx':'Nomor meter atau ID pelanggan';
   }
   j.addEventListener('change',atur);atur();
+  var rs=$('refSalin');
+  if(rs)rs.addEventListener('click',function(){
+    var k=$('refKode').textContent,o=$('refStatus');
+    function ok(){rs.textContent='Kode tersalin'}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(k).then(ok,function(){o.textContent='Salin manual kode: '+k})}
+    else o.textContent='Salin manual kode: '+k;
+  });
   $('lKirim').addEventListener('click',function(){
     var st=$('lStatus'),v=j.value,hp=(v==='Pulsa'||v==='Paket data');
     var no=$('lNomor').value.replace(/[^0-9]/g,''),nom=$('lNominal').value.trim().replace(/[\r\n]+/g,' ').slice(0,120);
